@@ -8,11 +8,13 @@ import 'jquery/dist/jquery';
 import 'popper.js/dist/popper';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
+import { MainMenu } from './components/MainMenu/mainmenu';
 
 
 
 ReactDOM.render(
   <React.StrictMode>
+    <MainMenu></MainMenu>
     <App />
   </React.StrictMode>,
   document.getElementById('root')
