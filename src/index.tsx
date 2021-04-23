@@ -14,11 +14,13 @@ import { Route } from 'react-router';
 import { ContactPage } from './components/ContactPage';
 import { UserLoginPage } from './components/UserLoginPage';
 import { HashRouter } from 'react-router-dom';
+import { CategoryPage } from './components/CategoryPage/CategoryPage';
 
 const menuItems=[
   new MainMenuItems('Home','/'),
   new MainMenuItems('Contact','/contact'),
   new MainMenuItems('Log in','/user/login'),
+  new MainMenuItems('Category 1','/category/1')
 
 ]
 
@@ -30,6 +32,7 @@ ReactDOM.render(
         <Route exact path="/" component={HomePage}></Route>
         <Route path="/contact" component={ContactPage}></Route>
         <Route path="/user/login" component={UserLoginPage}></Route>
+        <Route path="/category/:id" component={CategoryPage}></Route>
       </Switch>
     </HashRouter>
   </React.StrictMode>,
