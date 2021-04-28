@@ -51,7 +51,7 @@ export default function api(path:string, method:'GET'|'POST'|'PATCH'|'DELETE', b
 }
 
 //podaci koji stizu od API-ja
-interface ApiResponse{
+export interface ApiResponse{
     status:'ok'|'error'|'login',
     data:any
 }
@@ -98,7 +98,6 @@ export function saveRefreshToken(token:string)
 async function refreshToken():Promise<string|null>
 {
     const path='authorization/user/refresh';
-    //zahtjev koji treba da uputimo
     const data={
         token:getRefreshToken(),
     }
@@ -130,7 +129,7 @@ function getToken():string
     return 'Bearer' + token;
 }
 
-function saveToken(token:string)
+export function saveToken(token:string)
 {
     localStorage.setItem('api_token', token);
 }
