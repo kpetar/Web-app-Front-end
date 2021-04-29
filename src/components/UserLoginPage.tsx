@@ -111,7 +111,7 @@ private doLogin()
             saveToken(res.data.token);
             saveRefreshToken(res.data.refreshToken);
 
-            this.setLogginState(true);
+            this.setLogginState();
         }
     })
 }
@@ -126,10 +126,10 @@ private setErrorMessage(message:string)
     this.setState(newState);
 }
 
-private setLogginState(isLoggedIn:boolean)
+private setLogginState()
 {
     const newState=Object.assign(this.state,{
-        isLoggedIn:isLoggedIn
+        isLoggedIn:true
     })
 
     this.setState(newState);
