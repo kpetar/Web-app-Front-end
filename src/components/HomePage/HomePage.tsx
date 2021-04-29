@@ -9,7 +9,7 @@ import CategoryType from '../../types/CategoryTypes';
 
 interface HomePageState{
   
-  isPremision:false;
+  isLoggedIn:boolean;
   categories:CategoryType[];
 
 }
@@ -28,14 +28,62 @@ export class HomePage extends React.Component {
     super(props);
 
     this.state={
-      isPremision:false,
+      isLoggedIn:true,
       categories:[]
     }
   }
 
+  
+  componentWillMount(){
+    this.getCategories();
+  }
+  
+  componentWillUpdate(){
+    this.getCategories();
+  }
+
+  private getCategories()
+  {
+    api('api/category/','get',{})
+    .then((res:ApiResponse)=>{
+      if(res.status==='error' || res.status==='login')
+      {
+        this.setLogginState(false);
+        return;
+      }
+      this.putCategoriesInState(res.data);
+    })
+  }
+
+  
+  private putCategoriesInState(data: ApiCategoryDto[])
+  {
+    const categories:CategoryType[]=data.map(category=>{
+      return{
+        categoryId:category.categoryId,
+        name:category.name,
+        items:[],
+      };
+    });
+
+    const newState=Object.assign(this.state,{
+      categories:categories
+    });
+
+    this.setState(newState);
+  } 
+
+  private setLogginState(isLoggedIn:boolean){
+    const newState=Object.assign(this.state,{
+      isLoggedIn:isLoggedIn
+    })
+
+    this.setState(newState);
+  }
+
   render()
   {
-    if(this.state.isPremision===false)
+    if(this.state.isLoggedIn===false)
     {
       return (
         <Redirect to="/user/login"/>
@@ -61,21 +109,17 @@ export class HomePage extends React.Component {
     );
   }
   
-  componentWillMount(){
-    this.getCategories();
-  }
-
 
   private singleCategory(category:CategoryType)
   {
     return(
       <Col md="3" lg="4" sm="6" xs="12">
-      <Card>
+      <Card className="mb-3">
         <Card.Body>
-            <Card.Title>
+            <Card.Title as="p">
                 {category.name}
             </Card.Title>
-            <Link to={`/category/${category.categoryId}`} className="btn btn-primary btn-block">Open category
+            <Link to={`/category/${category.categoryId}`} className="btn btn-primary btn-block btn-sm">Open category
             </Link>
         </Card.Body>
         </Card>
@@ -83,44 +127,8 @@ export class HomePage extends React.Component {
     );
   }
 
-  private getCategories()
-  {
-    api('api/category/','get',{})
-    .then((res:ApiResponse)=>{
-      console.log(res);
-      if(res.status==='error' || res.status==='login')
-      {
-        this.setPremissionState(false);
-        return;
-      }
-      this.putCategoriesInState(res.data);
-    })
-  }
+  
 
-  private setPremissionState(isPremission:boolean){
-    const newState=Object.assign(this.state,{
-      isPremission:isPremission
-    })
-
-    this.setState(newState);
-  }
-
-  private putCategoriesInState(data: ApiCategoryDto[])
-  {
-    const categories:CategoryType[]=data.map(category=>{
-      return{
-        categoryId:category.categoryId,
-        name:category.name,
-        items:[],
-      };
-    });
-
-    const newState=Object.assign(this.state,{
-      categories:categories
-    });
-
-    this.setState(newState);
-  }
 }
 
 
