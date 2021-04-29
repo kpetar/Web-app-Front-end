@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { ApiConfig } from "../config/apiConfig";
 
-export default function api(path:string, method:'GET'|'POST'|'PATCH'|'DELETE', body?:any)
+export default function api(path:string, method:'get'|'post'|'patch'|'delete', body:any|undefined)
 {
     return new Promise<ApiResponse>((resolve)=>{
         const requestData={
@@ -10,34 +10,34 @@ export default function api(path:string, method:'GET'|'POST'|'PATCH'|'DELETE', b
             baseURL:ApiConfig.API_URL,
             data:JSON.stringify(body),
             headers:{
-                'Content-type':'application/json',
+                'Content-Type': 'application/json',
                 'Authorization':getToken()
             }
         };
         axios(requestData)
         .then(res=>responseHandler(res,resolve))
         .catch(async err=>{
-
-
             if(err.response.status===401)
             {
+                
                 const newToken= await refreshToken();
-    
+
                 if(!newToken)
                 {
                     const response:ApiResponse={
                         status:'login',
                         data:null
-                    }
+                    };
                     return resolve(response);
                 }
-    
+
                 saveToken(newToken);
-    
+
                 requestData.headers['Authorization'] = getToken();
-    
+
                 return await repeatRequest(requestData, resolve);
             }
+
 
             const response:ApiResponse={
                 status:'error',
@@ -58,13 +58,13 @@ export interface ApiResponse{
 
 async function responseHandler(res:AxiosResponse<any>, resolve: (value: ApiResponse) => void)
 {
-    if(res.status<200 || res.status>=300)
+    if(res.status<200 || res.status>=300) //HTTP statusi
     {
         //nepovoljan kod kada server ne odradi posao
         const response:ApiResponse={
             status:'error',
             data:res.data
-        }
+        };
         return resolve(response);
     }
     let response:ApiResponse;
@@ -86,14 +86,6 @@ async function responseHandler(res:AxiosResponse<any>, resolve: (value: ApiRespo
     resolve(response);
 }
 
-function getRefreshToken():string{
-    const token=localStorage.getItem('api_refresh_token');
-    return token+ '';
-}
-export function saveRefreshToken(token:string)
-{
-    localStorage.setItem('api_refresh_token',token);
-}
 
 async function refreshToken():Promise<string|null>
 {
@@ -108,7 +100,7 @@ async function refreshToken():Promise<string|null>
         baseURL:ApiConfig.API_URL,
         data:JSON.stringify(data),
         headers:{
-            'Content-type':'application/json'
+            'Content-Type': 'application/json'
         }
     };
 
@@ -126,12 +118,24 @@ async function refreshToken():Promise<string|null>
 function getToken():string
 {
     const token=localStorage.getItem('api_token');  //lokalno skladiste veb pregledaca
-    return 'Bearer' + token;
+    return 'Bearer ' + token;
 }
 
 export function saveToken(token:string)
 {
     localStorage.setItem('api_token', token);
+}
+
+
+function getRefreshToken():string{
+    const token=localStorage.getItem('api_refresh_token');
+    return token + '';
+}
+
+
+export function saveRefreshToken(token:string)
+{
+    localStorage.setItem('api_refresh_token',token);
 }
 
 async function repeatRequest(requestData: AxiosRequestConfig, resolve: (value: ApiResponse) => void)
@@ -160,5 +164,5 @@ async function repeatRequest(requestData: AxiosRequestConfig, resolve: (value: A
             data:err
         };
         return resolve(response);
-    })
+    });
 }

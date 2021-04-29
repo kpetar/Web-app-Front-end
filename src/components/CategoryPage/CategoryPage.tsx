@@ -10,7 +10,7 @@ interface CategoryPageProperties{
     //u tim params su pod istim imenom kao i u putanje /:id
     match:{
         params:{
-            id:number;
+            cId:number;
         }
     }
 }
@@ -19,11 +19,11 @@ interface CategoryPageState{
     category?:CategoryType
 }
 
-export class CategoryPage extends React.Component<CategoryPageProperties>{
+export default class CategoryPage extends React.Component<CategoryPageProperties>{
 
     state: CategoryPageState;
 
-    constructor(props: CategoryPageProperties | Readonly<CategoryPageProperties>){
+    constructor(props:Readonly<CategoryPageProperties>){
         super(props);
 
         this.state={};
@@ -48,11 +48,21 @@ export class CategoryPage extends React.Component<CategoryPageProperties>{
         this.getCategoryData();
     }
 
+    componentWillReceiveProps(newProperties:CategoryPageProperties)
+    {
+
+        if(newProperties.match.params.cId===this.props.match.params.cId)
+        {
+            return;
+        }
+        this.getCategoryData();
+    }
+
     private getCategoryData(){
         setTimeout(()=>{
             const data:CategoryType ={
-                name: 'Category' + this.props.match.params.id,
-                categoryId:this.props.match.params.id,
+                name: 'Category' + this.props.match.params.cId,
+                categoryId:this.props.match.params.cId,
                 items:[]
         };
         this.setState({
@@ -62,13 +72,5 @@ export class CategoryPage extends React.Component<CategoryPageProperties>{
     }, 750);
   }
 
-  componentWillReceiveProps(newProperties:CategoryPageProperties)
-  {
-
-      if(newProperties.match.params.id===this.props.match.params.id)
-      {
-          return;
-      }
-      this.getCategoryData();
-  }
+  
 }

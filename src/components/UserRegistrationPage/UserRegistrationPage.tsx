@@ -1,9 +1,9 @@
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import api, { ApiResponse } from '../../src/api/api';
+import api, { ApiResponse } from '../../api/api';
 
 interface UserRegistrationState{
     formData:{
@@ -11,15 +11,15 @@ interface UserRegistrationState{
         password:string;
         forename:string;
         surname:string;
-        phoneNumber:string;
-        postalAddress:string;
+        phone:string;
+        address:string;
     },
     message?:string,
     isRegistratonComplete:boolean;
 
 }
 
-export class UserRegistrationPage extends React.Component{
+export default class UserRegistrationPage extends React.Component{
 
     state:UserRegistrationState;
 
@@ -28,16 +28,16 @@ export class UserRegistrationPage extends React.Component{
         super(props);
 
         this.state={
+            isRegistratonComplete:false,
             formData:{
                 email:'',
                 password:'',
                 forename:'',
                 surname:'',
-                phoneNumber:'',
-                postalAddress:''
+                phone:'',
+                address:''
             },
-            message:'',
-            isRegistratonComplete:false
+            
         }
     }
 
@@ -74,8 +74,8 @@ export class UserRegistrationPage extends React.Component{
                     <Form.Group>
                         <Form.Label htmlFor="email">E-mail</Form.Label>
                         <Form.Control type="email" id="email"
-                                    value={this.state.formData?.email}
-                                    onChange={event=>this.formInputChange(event)}  
+                                    value={this.state.formData.email}
+                                    onChange={event=>this.formInputChange(event as any)}  
                                         />
                     </Form.Group>
                 </Col>
@@ -83,8 +83,8 @@ export class UserRegistrationPage extends React.Component{
                     <Form.Group>
                         <Form.Label htmlFor="password">Password</Form.Label>
                         <Form.Control   id="password" type="password"
-                                                    value={this.state.formData?.password}
-                                                    onChange={ event=>this.formInputChange(event)}/>
+                                                    value={this.state.formData.password}
+                                                    onChange={ event=>this.formInputChange(event as any)}/>
                     </Form.Group>
                 </Col>
                 </Row>
@@ -93,8 +93,8 @@ export class UserRegistrationPage extends React.Component{
                 <Form.Group>
                     <Form.Label htmlFor="forename">Forename</Form.Label>
                     <Form.Control   id="forename" type="forename"
-                                                value={this.state.formData?.forename}
-                                                onChange={ event=>this.formInputChange(event)}/>
+                                                value={this.state.formData.forename}
+                                                onChange={ event=>this.formInputChange(event as any)}/>
                 </Form.Group>
                 </Col>
                 
@@ -102,27 +102,31 @@ export class UserRegistrationPage extends React.Component{
                 <Form.Group>
                     <Form.Label htmlFor="surname">Surname</Form.Label>
                     <Form.Control   id="surname" type="surname"
-                                                value={this.state.formData?.surname}
-                                                onChange={ event=>this.formInputChange(event)}/>
+                                                value={this.state.formData.surname}
+                                                onChange={ event=>this.formInputChange(event as any)}/>
                 </Form.Group>
                 </Col>
                 </Row>
                 <Form.Group>
                     <Form.Label htmlFor="phone">Phone</Form.Label>
                     <Form.Control   id="phone" type="phone"
-                                                value={this.state.formData?.phoneNumber}
-                                                onChange={ event=>this.formInputChange(event)}/>
+                                                value={this.state.formData.phone}
+                                                onChange={ event=>this.formInputChange(event as any)}/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label htmlFor="address">Postall Address</Form.Label>
                     <Form.Control as="textarea" rows={4} id="address"
-                                 value={this.state.formData?.postalAddress}
-                                 onChange={ event=>this.formInputChange(event)}/>
+                                 value={this.state.formData.address}
+                                 onChange={ event=>this.formInputChange(event as any)}/>
                 </Form.Group>
                 <Form.Group>
                     <Button variant="primary" onClick={()=>this.doRegister()}>Registered</Button>
                  </Form.Group>
             </Form>
+            <Alert variant="danger" 
+            className={this.state.message?'':'d-none'}>
+                {this.state.message}
+            </Alert>
             </>
         )
     }
@@ -132,10 +136,10 @@ export class UserRegistrationPage extends React.Component{
         return(
             <p>The account has been registered<br/>
             <Link to="/user/login">Click here </Link>to go to the login page</p>
-        )
+        );
     }
 
-    private formInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>)
+    private formInputChange(event: React.ChangeEvent<HTMLInputElement>)
     {
         const newFormData=Object.assign(this.state.formData, {
             [event.target.id]:event.target.value
@@ -151,36 +155,36 @@ export class UserRegistrationPage extends React.Component{
     private doRegister()
     {
         const data={
-            email:this.state.formData?.email,
-            password:this.state.formData?.password,
-            forename:this.state.formData?.forename,
-            surname:this.state.formData?.surname,
-            phoneNumber:this.state.formData?.phoneNumber,
-            postalAddress:this.state.formData?.postalAddress
-        }
-        api('authorization/user/register', 'POST',data)
+            email:this.state.formData.email,
+            password:this.state.formData.password,
+            forename:this.state.formData.forename,
+            surname:this.state.formData.surname,
+            phone:this.state.formData.phone,
+            address:this.state.formData.address
+        };
+        api('authorization/user/register/', 'post', data)
         .then((res:ApiResponse)=>{
+            console.log(res);
             if(res.status==='error')
             {
                 this.setErrorMessage('System error..Try again!');
                 return;
             }
 
-            if(res.status==='ok')
+            
+            if(res.data.statusCode!==undefined)
             {
-                if(res.data.statusCode!==undefined)
+                let message='';
+                switch(res.data.statusCode)
                 {
-                    let message='';
-                    switch(res.data.statusCode)
-                    {
-                        case -6001: message='Account has not been created'; break;
-                    }
-                    this.setErrorMessage(message);
-                    return;
+                    case -6001: message='Account has not been created'; break;
                 }
+                this.setErrorMessage(message);
+                return;
             }
+            
 
-            this.registrationComplete();
+            this.registrationComplete(true);
         })
     }
 
@@ -194,10 +198,10 @@ export class UserRegistrationPage extends React.Component{
         this.setState(newState);
     }
 
-    private registrationComplete()
+    private registrationComplete(isRegComplete:boolean)
     {
         const newState=Object.assign(this.state,{
-            isRegistratonComplete:true
+            isRegistratonComplete:isRegComplete
         })
 
         this.setState(newState);

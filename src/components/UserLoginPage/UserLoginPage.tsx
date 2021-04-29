@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Alert, Button, Card, Col, Container, Form } from "react-bootstrap";
 import { Redirect } from "react-router";
-import api, { ApiResponse, saveRefreshToken, saveToken } from '../../src/api/api';
+import api, { ApiResponse, saveRefreshToken, saveToken } from '../../api/api';
 
 interface UserLoginPageState
 {
@@ -13,7 +13,7 @@ interface UserLoginPageState
     isLoggedIn:boolean;
 }
 
-export class UserLoginPage extends React.Component{
+export default class UserLoginPage extends React.Component{
 
     state:UserLoginPageState;
 
@@ -51,19 +51,19 @@ export class UserLoginPage extends React.Component{
                                 <Form.Label htmlFor="email">E-mail</Form.Label>
                                 <Form.Control   id="email" type="email"
                                                 value={this.state.email}
-                                                onChange={ event=>this.formInputChange(event)}/>
+                                                onChange={ event=>this.formInputChange(event as any)}/>
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label htmlFor="password">Password</Form.Label>
                                 <Form.Control   id="password" type="password"
                                                 value={this.state.password}
-                                                onChange={ event=>this.formInputChange(event)}/>
+                                                onChange={ event=>this.formInputChange(event as any)}/>
                             </Form.Group>
                             <Form.Group>
                                 <Button variant="primary" onClick={()=>this.doLogin()}>Log in</Button>
                             </Form.Group>
                         </Form>
-                        <Alert variant="danger" className={this.state.errorMessage?'':"d-none"}
+                        <Alert variant="danger"  className={this.state.errorMessage ? '' : 'd-none'}
                         /> {this.state.errorMessage}
                     </Card.Body>
                 </Card>
@@ -73,7 +73,7 @@ export class UserLoginPage extends React.Component{
     }
 
     
-private formInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>)
+private formInputChange(event: React.ChangeEvent<HTMLInputElement>)
 {
     const newState=Object.assign(this.state,{
         [event.target.id]:event.target.value
@@ -84,14 +84,14 @@ private formInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectEl
 
 private doLogin()
 {
-    api('authorization/user/login', 'POST',{
+    api('authorization/user/login/', 'post',{
         email:this.state.email,
         password:this.state.password
     })
     .then((res:ApiResponse)=>{
         if(res.status==='error')
         {
-            this.setErrorMessage('System error.. Try again!');
+            console.log(res.data);
             return;
         }
 

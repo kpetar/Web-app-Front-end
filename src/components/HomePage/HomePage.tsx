@@ -4,8 +4,8 @@ import React from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import api, { ApiResponse } from '../api/api';
-import CategoryType from '../types/CategoryTypes';
+import api, { ApiResponse } from '../../api/api';
+import CategoryType from '../../types/CategoryTypes';
 
 interface HomePageState{
   
@@ -60,10 +60,11 @@ export class HomePage extends React.Component {
       
     );
   }
-
+  
   componentWillMount(){
     this.getCategories();
   }
+
 
   private singleCategory(category:CategoryType)
   {
@@ -74,7 +75,7 @@ export class HomePage extends React.Component {
             <Card.Title>
                 {category.name}
             </Card.Title>
-            <Link to={`/category/${category.categoryId}`} className="btn btn-primary">Open category
+            <Link to={`/category/${category.categoryId}`} className="btn btn-primary btn-block">Open category
             </Link>
         </Card.Body>
         </Card>
@@ -84,8 +85,9 @@ export class HomePage extends React.Component {
 
   private getCategories()
   {
-    api('api/category','GET',{})
+    api('api/category/','get',{})
     .then((res:ApiResponse)=>{
+      console.log(res);
       if(res.status==='error' || res.status==='login')
       {
         this.setPremissionState(false);
