@@ -13,14 +13,13 @@ import Switch from 'react-bootstrap/esm/Switch';
 import { HashRouter, Route } from 'react-router-dom';
 import ContactPage from './components/ContactPage/ContactPage';
 import UserLoginPage from './components/UserLoginPage/UserLoginPage';
-import CategoryPage from './components/CategoryPage/CategoryPage';
 import UserRegistrationPage from './components/UserRegistrationPage/UserRegistrationPage';
+import CategoryPage from './components/CategoryPage/CategoryPage';
 
 const menuItems=[
   new MainMenuItems('Home','/'),
   new MainMenuItems('Contact','/contact/'),
   new MainMenuItems('Log in','/user/login/'),
-  new MainMenuItems('Category 1','/category/1/'),
   new MainMenuItems('Register', '/user/register/'),
 
 ]
