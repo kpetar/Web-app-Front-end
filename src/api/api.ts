@@ -67,23 +67,13 @@ async function responseHandler(res:AxiosResponse<any>, resolve: (value: ApiRespo
         };
         return resolve(response);
     }
-    let response:ApiResponse;
-    if(res.data.statusCode<0)
-    { 
-        //nepovoljan kod kada aplikacija ne odradi posao
-        response={
-            status:'login',
-            data:null
-        };
-    }
-    else
-    {
-        response={
-            status:'ok',
-            data:res.data
-        };
-    }
-    resolve(response);
+    
+    const response:ApiResponse={
+        status:'ok',
+        data:res.data
+    };
+
+    return resolve(response);
 }
 
 
