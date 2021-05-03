@@ -3,26 +3,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Alert, Button, Card, Col, Container, Form } from "react-bootstrap";
 import { Redirect } from "react-router";
-import api, { ApiResponse, saveRefreshToken, saveToken } from '../../api/api';
+import api, { ApiResponse, saveIdentity, saveRefreshToken, saveToken } from '../../api/api';
 
-interface UserLoginPageState
+interface AdministratorLoginPageState
 {
-    email:string;
+    username:string;
     password:string;
     errorMessage:string;
     isLoggedIn:boolean;
 }
 
-export default class UserLoginPage extends React.Component{
+export default class AdministratorLoginPage extends React.Component{
 
-    state:UserLoginPageState;
+    state:AdministratorLoginPageState;
 
     constructor(props: {} | Readonly<{}>)
     {
         super(props);
 
         this.state={
-            email:'',
+            username:'',
             password:'',
             errorMessage:'',
             isLoggedIn:false
@@ -34,7 +34,7 @@ export default class UserLoginPage extends React.Component{
         if(this.state.isLoggedIn===true)
         {
             return (
-                <Redirect to="/"/>
+                <Redirect to="/administrator/dashboard/"/>
             );
         }
 
@@ -44,13 +44,13 @@ export default class UserLoginPage extends React.Component{
                 <Card>
                     <Card.Body>
                         <Card.Title>
-                            <FontAwesomeIcon icon={faUserAlt}/> User info
+                            <FontAwesomeIcon icon={faUserAlt}/> Administrator info
                         </Card.Title>
                         <Form>
                             <Form.Group>
-                                <Form.Label htmlFor="email">E-mail</Form.Label>
-                                <Form.Control   id="email" type="email"
-                                                value={this.state.email}
+                                <Form.Label htmlFor="username">Username</Form.Label>
+                                <Form.Control   id="username" type="username"
+                                                value={this.state.username}
                                                 onChange={ event=>this.formInputChange(event as any)}/>
                             </Form.Group>
                             <Form.Group>
@@ -84,14 +84,13 @@ private formInputChange(event: React.ChangeEvent<HTMLInputElement>)
 
 private doLogin()
 {
-    api('authorization/user/login/', 'post',{
-        email:this.state.email,
+    api('authorization/administrator/login/', 'post',{
+        username:this.state.username,
         password:this.state.password
     })
     .then((res:ApiResponse)=>{
         if(res.status==='error')
         {
-            console.log(res.data);
             return;
         }
 
@@ -102,15 +101,15 @@ private doLogin()
                 let message='';
                 switch(res.data.statusCode)
                 {
-                    case -3001: message='Unknown email'; break;
+                    case -3001: message='Unknown username'; break;
                     case -3002: message='Bad password'; break;
                 }
                 this.setErrorMessage(message);
                 return;
             }
-            saveToken('user',res.data.token);
-            saveRefreshToken('user',res.data.refreshToken);
-
+            saveToken('administrator',res.data.token);
+            saveRefreshToken('administrator',res.data.refreshToken);
+            saveIdentity('administrator', res.data.identity);
             this.setLogginState();
         }
     })

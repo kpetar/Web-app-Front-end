@@ -1,7 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { ApiConfig } from "../config/apiConfig";
 
-export default function api(path:string, method:'get'|'post'|'patch'|'delete', body:any|undefined)
+export default function api(path:string,
+     method:'get'|'post'|'patch'|'delete',
+    body:any|undefined,
+    role:'user'|'administrator'='user' //neophodna da bi se znalo koji se token koristi
+    )
 {
     return new Promise<ApiResponse>((resolve)=>{
         const requestData={
@@ -11,7 +15,7 @@ export default function api(path:string, method:'get'|'post'|'patch'|'delete', b
             data:JSON.stringify(body),
             headers:{
                 'Content-Type': 'application/json',
-                'Authorization':getToken()
+                'Authorization':getToken(role)
             }
         };
         axios(requestData)
@@ -20,7 +24,7 @@ export default function api(path:string, method:'get'|'post'|'patch'|'delete', b
             if(err.response.status===401)
             {
                 
-                const newToken= await refreshToken();
+                const newToken= await refreshToken(role);
 
                 if(!newToken)
                 {
@@ -31,9 +35,9 @@ export default function api(path:string, method:'get'|'post'|'patch'|'delete', b
                     return resolve(response);
                 }
 
-                saveToken(newToken);
+                saveToken(role, newToken);
 
-                requestData.headers['Authorization'] = getToken();
+                requestData.headers['Authorization'] = getToken(role);
 
                 return await repeatRequest(requestData, resolve);
             }
@@ -77,11 +81,11 @@ async function responseHandler(res:AxiosResponse<any>, resolve: (value: ApiRespo
 }
 
 
-async function refreshToken():Promise<string|null>
+async function refreshToken(role:'user'|'administrator'):Promise<string|null>
 {
-    const path='authorization/user/refresh';
+    const path='authorization/'+ role +'/refresh';
     const data={
-        token:getRefreshToken(),
+        token:getRefreshToken(role),
     }
 
     const refreshTokenRequestData:AxiosRequestConfig={
@@ -105,28 +109,39 @@ async function refreshToken():Promise<string|null>
 
 }
 
-function getToken():string
+function getToken(role:'user'|'administrator'):string
 {
-    const token=localStorage.getItem('api_token');  //lokalno skladiste veb pregledaca
+    const token=localStorage.getItem('api_token' + role);  //lokalno skladiste veb pregledaca
     return 'Bearer ' + token;
 }
 
-export function saveToken(token:string)
+export function saveToken(role:'user'|'administrator', token:string)
 {
-    localStorage.setItem('api_token', token);
+    localStorage.setItem('api_token' + role, token);
 }
 
 
-function getRefreshToken():string{
-    const token=localStorage.getItem('api_refresh_token');
+function getRefreshToken(role:'user'|'administrator'):string{
+    const token=localStorage.getItem('api_refresh_token' + role);
     return token + '';
 }
 
-
-export function saveRefreshToken(token:string)
+export function saveIdentity(role:'user'|'administrator', identity:string)
 {
-    localStorage.setItem('api_refresh_token',token);
+    localStorage.setItem('api_identity' + role, identity)
 }
+
+export function getIdentity(role:'user'|'administrator'):string
+{
+    const token=localStorage.getItem('api_identity' + role);  //lokalno skladiste veb pregledaca
+    return 'Bearer ' + token;
+}
+
+export function saveRefreshToken(role:'user'|'administrator', token:string)
+{
+    localStorage.setItem('api_refresh_token' + role,token);
+}
+
 
 async function repeatRequest(requestData: AxiosRequestConfig, resolve: (value: ApiResponse) => void)
 {

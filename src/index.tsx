@@ -16,14 +16,18 @@ import UserLoginPage from './components/UserLoginPage/UserLoginPage';
 import CategoryPage from './components/CategoryPage/CategoryPage';
 import OrderPage from './components/OrdersPage/OrdersPage';
 import { UserRegistrationPage } from './components/UserRegistrationPage/UserRegistrationPage';
+import AdministratorLoginPage from './components/AdministratorLoginPage/AdministratorLoginPage';
+import AdministratorDashboard from './components/AdministratorDashboard/AdministratorDashboard';
 
 const menuItems=[
   new MainMenuItems('Home','/'),
   new MainMenuItems('Contact','/contact/'),
   new MainMenuItems('Log in','/user/login/'),
   new MainMenuItems('Register', '/user/register/'),
-  new MainMenuItems('My Orders', "/cart/orders/")
-]
+  new MainMenuItems('My Orders', "/cart/orders/"),
+  new MainMenuItems('Administrator login', '/administrator/login'),
+  new MainMenuItems('Administrator Dashboard', '/administrator/dashboard/')
+];
 
 ReactDOM.render(
   <React.StrictMode>
@@ -36,6 +40,8 @@ ReactDOM.render(
         <Route path="/category/:cId" component={CategoryPage}></Route>
         <Route path="/user/register" component={UserRegistrationPage}></Route>
         <Route path="/cart/orders" component={OrderPage}></Route>
+        <Route path="/administrator/login" component={AdministratorLoginPage}></Route>
+        <Route path="/administrator/dashboard" component={AdministratorDashboard}></Route>
       </Switch>
     </HashRouter>
   </React.StrictMode>,
