@@ -4,6 +4,7 @@ import React from 'react';
 import { Card, Container} from 'react-bootstrap';
 import {  Redirect } from 'react-router-dom';
 import api, { ApiResponse, getIdentity } from '../../api/api';
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
 interface AdministratorDashboardState{
   
@@ -71,6 +72,7 @@ interface AdministratorDashboardState{
     
     return (
       <Container>
+        <RoledMainMenu role='administrator'/>
           <Card>
               <Card.Body>
                   <Card.Title>

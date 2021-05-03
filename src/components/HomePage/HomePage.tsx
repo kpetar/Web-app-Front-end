@@ -5,6 +5,7 @@ import { Card, Col, Container, Row } from 'react-bootstrap';
 import { Link, Redirect } from 'react-router-dom';
 import api, { ApiResponse } from '../../api/api';
 import CategoryType from '../../types/CategoryTypes';
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
 interface HomePageState{
   
@@ -94,6 +95,7 @@ interface ApiCategoryDto{
     
     return (
       <Container>
+        <RoledMainMenu role='user'/>
           <Col md={{span:10, offset:1}}>
           <Card>
               <Card.Body>

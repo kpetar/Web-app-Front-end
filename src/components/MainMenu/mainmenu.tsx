@@ -16,6 +16,8 @@ export class MainMenuItems{
 
 interface MainMenuProperties{
     items:MainMenuItems[];
+    //mora se prikazati i korpa
+    showCart?:boolean;
 }
 
 interface MainMenuState{
@@ -50,14 +52,12 @@ export class MainMenu extends React.Component<MainMenuProperties>{
     render()
     {
         return(
-            <Container>
                 <Nav variant="tabs">
                     <HashRouter>
                         {this.state.items.map(this.makeNavLink)}
-                        <Cart />
+                        {this.props.showCart? <Cart/> : ''}
                     </HashRouter>
                 </Nav>
-            </Container>
             
         );
     }

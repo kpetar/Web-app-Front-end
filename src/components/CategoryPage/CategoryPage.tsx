@@ -6,6 +6,7 @@ import { Link, Redirect } from "react-router-dom";
 import api, { ApiResponse } from "../../api/api";
 import ArticleType from "../../types/ArticleType";
 import CategoryType from "../../types/CategoryTypes";
+import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";
 import SingleArticle from "../SingleArticle/SingleArticle";
 
 //u okviru interfejsa se nalaze osobine koje se mogu naci u okviru komponente CategoryPage
@@ -532,6 +533,7 @@ componentDidUpdate(oldProperties:CategoryPageProperties)
 
     return(
         <Container>
+            <RoledMainMenu role='user'/>
             <Card>
                 <Card.Body>
                     <Card.Title>

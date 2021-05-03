@@ -7,6 +7,7 @@ import api, { ApiResponse } from "../../api/api";
 import ArticleType from "../../types/ArticleType";
 import CartType from "../../types/CartType";
 import OrderType from "../../types/OrderType";
+import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";
 
 //indikator da li je korisnik ulogovan
 interface OrdersPageState{
@@ -170,6 +171,7 @@ export default class OrderPage extends React.Component{
 
         return(
             <Container>
+                <RoledMainMenu role='user'/>
                 <Card>
                     <Card.Body>
                         <Card.Title>
