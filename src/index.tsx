@@ -13,15 +13,16 @@ import Switch from 'react-bootstrap/esm/Switch';
 import { HashRouter, Route } from 'react-router-dom';
 import ContactPage from './components/ContactPage/ContactPage';
 import UserLoginPage from './components/UserLoginPage/UserLoginPage';
-import UserRegistrationPage from './components/UserRegistrationPage/UserRegistrationPage';
 import CategoryPage from './components/CategoryPage/CategoryPage';
+import OrderPage from './components/OrdersPage/OrdersPage';
+import { UserRegistrationPage } from './components/UserRegistrationPage/UserRegistrationPage';
 
 const menuItems=[
   new MainMenuItems('Home','/'),
   new MainMenuItems('Contact','/contact/'),
   new MainMenuItems('Log in','/user/login/'),
   new MainMenuItems('Register', '/user/register/'),
-
+  new MainMenuItems('My Orders', "/cart/orders/")
 ]
 
 ReactDOM.render(
@@ -34,6 +35,7 @@ ReactDOM.render(
         <Route path="/user/login" component={UserLoginPage}></Route>
         <Route path="/category/:cId" component={CategoryPage}></Route>
         <Route path="/user/register" component={UserRegistrationPage}></Route>
+        <Route path="/cart/orders" component={OrderPage}></Route>
       </Switch>
     </HashRouter>
   </React.StrictMode>,

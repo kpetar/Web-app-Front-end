@@ -4,9 +4,9 @@ import React from "react";
 import { Button, Card, Col, Container, Form, Row  } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
 import api, { ApiResponse } from "../../api/api";
-import { ApiConfig } from "../../config/apiConfig";
 import ArticleType from "../../types/ArticleType";
 import CategoryType from "../../types/CategoryTypes";
+import SingleArticle from "../SingleArticle/SingleArticle";
 
 //u okviru interfejsa se nalaze osobine koje se mogu naci u okviru komponente CategoryPage
 interface CategoryPageProperties{
@@ -20,11 +20,11 @@ interface CategoryPageProperties{
 }
 
 interface CategoryPageState{
-    category?:CategoryType,
-    articles?:ArticleType[],
-    subcategories?:CategoryType[],
-    isUserLoggedIn:boolean,
-    message?:string,
+    isUserLoggedIn:boolean;
+    category?:CategoryType;
+    articles?:ArticleType[];
+    subcategories?:CategoryType[];
+    message:string;
     filters:{
         keywords:string;
         minPrice:number;
@@ -34,12 +34,12 @@ interface CategoryPageState{
             featureId:number;
             value:string;
         }[];
-    },
+    };
     features:{
         featureId:number;
         name:string;
         values:string[];
-    }[]
+    }[];
 }
 
 interface CategoryDto{
@@ -71,30 +71,16 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
 
         this.state={
             isUserLoggedIn:true,
+            message:'',
             filters:{
                 keywords:'',
                 minPrice:0.01,
-                maxPrice:100000.00,
+                maxPrice:100000,
                 order:"price asc",
                 selectedFeatures:[]
             },
             features:[]
         };
-    }
-
-    
-    componentDidMount(){
-        this.getCategoryData();
-    }
-
-    componentDidUpdate(newProperties:CategoryPageProperties)
-    {
-
-        if(newProperties.match.params.cId===this.props.match.params.cId)
-        {
-            return;
-        }
-        this.getCategoryData();
     }
 
     
@@ -108,7 +94,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
       <Row>
         {this.state.subcategories?.map(this.singleCategory)}
       </Row>
-    )
+    );
   }
 
   private showArticles()
@@ -117,7 +103,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     {
       return(
           <div>There are no articles to show</div>
-      )
+      );
     }
     return (
       <Row>
@@ -129,7 +115,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
   private singleCategory(category:CategoryType)
   {
     return(
-      <Col md="3" lg="4" sm="6" xs="12">
+      <Col md="3" lg="4" sm="6" xs="12" key={ 'Category ' + category.categoryId }>
       <Card className="mb-3">
         <Card.Body>
             <Card.Title as="p">
@@ -143,34 +129,25 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     );
   }
 
-  private singleArticle(article:ArticleType)
-  {
-    return(
-      <Col md="6" lg="4" sm="6" xs="12">
-      <Card className="mb-3">
-          <Card.Header>
-            <img    alt={article.name}
-                    src={ApiConfig.PHOTO_PATH + 'small/' + article.imageUrl}
-                    className="w-100"/>
-          </Card.Header>
-        <Card.Body>
-            <Card.Title as="p">
-                {article.name}
-            </Card.Title>
-            <Card.Text>
-                {article.excerpt}
-            </Card.Text>
-            <Card.Text>
-                Price: {Number(article.price).toFixed(2)} KM
-            </Card.Text>
-            <Link to={`/article/${article.articleId}`} className="btn btn-primary btn-block btn-sm">Open article
-            </Link>
-        </Card.Body>
-        </Card>
-      </Col>
+  private singleArticle(article: ArticleType) {
+    return (
+        <SingleArticle article={article} key={ 'Article ' + article.articleId } />
     );
-  }
+}
 
+componentDidMount(){
+    this.getCategoryData();
+}
+
+componentDidUpdate(oldProperties:CategoryPageProperties)
+{
+
+    if(oldProperties.match.params.cId===this.props.match.params.cId)
+    {
+        return;
+    }
+    this.getCategoryData();
+}
     
 
 
@@ -205,9 +182,9 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         });
 
 
-        const order=this.state.filters.order.split(' ');
-        const orderBy=order[0];
-        const orderDirection=order[1].toUpperCase();
+        const orderParts=this.state.filters.order.split(' ');
+        const orderBy=orderParts[0];
+        const orderDirection=orderParts[1].toUpperCase();
 
         const featureFilters: any[]=[];
 
@@ -217,6 +194,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         {
             let found=false;
             let foundReference=null;
+
             for(const featureFilter of featureFilters)
             {
                 if(featureFilter.featureId===item.featureId)
@@ -277,7 +255,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                 description:article.description,
                 imageUrl:'',
                 price:0
-                }
+                };
 
                 //ako postoji bar jedna fotografija
                 if(article.photos!==undefined && article.photos?.length>0)
@@ -294,12 +272,12 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
 
             //setovanje novo dobijenih artikala
             this.setArticles(articles);
-        })
+        });
 
         this.getFeatures();
   }
 
-  private getFeatures(){
+   getFeatures(){
       api('api/feature/values/' + this.props.match.params.cId, 'get', {})
       .then((res:ApiResponse)=>{
           if(res.status==='login')
@@ -311,7 +289,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
               return this.setMessageError('Request error. Please refresh the page.');
           }
           this.setFeatures(res.data.features);
-      })
+      });
   }
 
   private setCategoryData(category:CategoryType)
@@ -343,7 +321,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
 
   private setLogginState(isLoggedIn:boolean){
     const newState=Object.assign(this.state,{
-      isLoggedIn:isLoggedIn
+        isUserLoggedIn:isLoggedIn
     })
 
     this.setState(newState);
@@ -356,8 +334,10 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
           return;
       }
       return (
-          <Card.Text>{}</Card.Text>
-      )
+            <Card.Text>
+              {this.state.message}
+            </Card.Text>
+      );
   }
 
   private setMessageError(message:string){
@@ -383,15 +363,15 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             <Row>
                 <Col xs="12" sm="6">
                 <Form.Label     htmlFor="minPrice">Min price:</Form.Label>
-                    <Form.Control   type="text" id="minPrice" value={this.state.filters.minPrice}
-                                    step="0.01" min="0.01" max="9999.99"
+                    <Form.Control   type="number" id="minPrice" value={this.state.filters.minPrice}
+                                    step="0.01" min="0.01" max="99999.99"
                                      onChange={(event)=>this.setMinPriceFilter(event as any)}
                     />
                 </Col>
 
                 <Col xs="12" sm="6">
                 <Form.Label     htmlFor="maxPrice">Max price:</Form.Label>
-                    <Form.Control   type="text" id="maxPrice" value={this.state.filters.maxPrice}
+                    <Form.Control   type="number" id="maxPrice" value={this.state.filters.maxPrice}
                                      step="0.01" min="0.02" max="100000"
                                      onChange={(event)=>this.setMaxPriceFilter(event as any)}
                     />
@@ -401,7 +381,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             </Form.Group>
 
             <Form.Group>
-                    <Form.Control   as="select" id="order" value={this.state.filters.order} 
+                    <Form.Control   as="select" id="sortOrder" value={this.state.filters.order} 
                                     onChange={(event)=>this.setChangeSortOrder(event as any)}
                                     >
                     <option value="name asc">   Sort by name    -ascending</option>
@@ -425,19 +405,20 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
   private printFeatureFilterComponent(feature:{featureId:number, name:string, values:string[]})
   {
       return (
-          <Form.Group>
+          <Form.Group key={ 'Feature Filter '+ feature.featureId}>
               <Form.Label><strong>{feature.name}</strong></Form.Label>
               {feature.values.map(value=>this.printFeatureFitlerCheckbox(feature, value), this)}
           </Form.Group>
-      )
+      );
   }
   private printFeatureFitlerCheckbox(feature:any, value:string){
       return(     
             <Form.Check type="checkbox" label={value} value={value}
                         data-feature-id={feature.featureId}
                         onChange={(event:any)=>this.featureFilterChanged(event as any)}
+                        key={'Feature Check Box ' + feature.featureId + 'with' + value}
                 />
-      )
+      );
   }
 
   private featureFilterChanged(event:React.ChangeEvent<HTMLInputElement>)
@@ -460,12 +441,12 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
   private addFeatureFilterValue(featureId:number, value:string)
   {
       //dobija se kao lista starog selectedFeatures i dodaje se preko push
-        const newSelectedFeatures=[ ... this.state.filters.selectedFeatures];
+        const newSelectedFeatures=[...this.state.filters.selectedFeatures];
 
         newSelectedFeatures.push({
             featureId:featureId,
             value:value
-        })
+        });
 
         this.setSelectedFeatures(newSelectedFeatures);
   }
@@ -480,7 +461,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         //   return true;
           //ili
         return !(record.featureId===featureId && record.value===value);
-      })
+      });
 
       this.setSelectedFeatures(newSelectedFeatures);
   }

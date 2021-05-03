@@ -13,17 +13,17 @@ interface UserRegistrationState{
         surname:string;
         phone:string;
         address:string;
-    },
-    message?:string,
+    };
+    message?:string;
     isRegistratonComplete:boolean;
 
 }
 
-export default class UserRegistrationPage extends React.Component{
+export  class UserRegistrationPage extends React.Component{
 
     state:UserRegistrationState;
 
-    constructor(props: {} | Readonly<{}>)
+    constructor(props: Readonly<{}>)
     {
         super(props);
 
@@ -37,7 +37,7 @@ export default class UserRegistrationPage extends React.Component{
                 phone:'',
                 address:''
             }
-        }
+        };
     }
 
     
@@ -73,9 +73,10 @@ export default class UserRegistrationPage extends React.Component{
             phone:this.state.formData?.phone,
             address:this.state.formData?.address
         };
-        api('authorization/user/register', 'post', data)
+        api('authorization/user/register/', 'post', data)
         .then((res:ApiResponse)=>{
            
+            console.log(res);
             if(res.status==='error')
             {
                 this.setErrorMessage('System error..Try again!');
@@ -193,7 +194,7 @@ export default class UserRegistrationPage extends React.Component{
                 </Form.Group>
                 <Form.Group>
                     <Form.Label htmlFor="address">Postall Address</Form.Label>
-                    <Form.Control as="textarea" rows={4} id="address"
+                    <Form.Control  id="address" as="textarea" rows={4}
                                  value={this.state.formData.address}
                                  onChange={ event=>this.formInputChange(event as any)}/>
                 </Form.Group>
@@ -202,7 +203,7 @@ export default class UserRegistrationPage extends React.Component{
                  </Form.Group>
             </Form>
             <Alert variant="danger" 
-            className={this.state.message?'':'d-none'}>
+            className={this.state.message ? '' : 'd-none'}>
                 {this.state.message}
             </Alert>
             </>
