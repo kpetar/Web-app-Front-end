@@ -4,6 +4,7 @@ import React from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { Link, Redirect } from 'react-router-dom';
 import api, { ApiResponse } from '../../api/api';
+import { ApiCategoryDto } from '../../dtos/ApiCategoryDto';
 import CategoryType from '../../types/CategoryTypes';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
@@ -14,10 +15,6 @@ interface HomePageState{
 
 }
 
-interface ApiCategoryDto{
-  categoryId:number;
-  name:string;
-}
 
  class HomePage extends React.Component {
   

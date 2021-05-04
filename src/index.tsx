@@ -17,6 +17,7 @@ import OrderPage from './components/OrdersPage/OrdersPage';
 import { UserRegistrationPage } from './components/UserRegistrationPage/UserRegistrationPage';
 import AdministratorLoginPage from './components/AdministratorLoginPage/AdministratorLoginPage';
 import AdministratorDashboard from './components/AdministratorDashboard/AdministratorDashboard';
+import AdministratorDashboardCategory from './components/AdministratorDashboardCategory/AdministratorDashboardCategory';
 
 
 ReactDOM.render(
@@ -30,7 +31,8 @@ ReactDOM.render(
         <Route path="/user/register" component={UserRegistrationPage}></Route>
         <Route path="/cart/orders" component={OrderPage}></Route>
         <Route path="/administrator/login" component={AdministratorLoginPage}></Route>
-        <Route path="/administrator/dashboard" component={AdministratorDashboard}></Route>
+        <Route exact path="/administrator/dashboard/" component={AdministratorDashboard}></Route>
+        <Route path="/administrator/dashboard/category/" component={AdministratorDashboardCategory}></Route>
       </Switch>
     </HashRouter>
   </React.StrictMode>,
