@@ -1,10 +1,9 @@
 import { faBox, faBoxOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Alert, Button, Card, Container, Modal, Table } from "react-bootstrap";
+import { Button, Card, Container, Modal, Table } from "react-bootstrap";
 import { Redirect } from "react-router";
 import api, { ApiResponse } from "../../api/api";
-import ArticleType from "../../types/ArticleType";
 import CartType from "../../types/CartType";
 import OrderType from "../../types/OrderType";
 import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";

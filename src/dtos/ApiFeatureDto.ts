@@ -1,0 +1,7 @@
+//sadrzi sve ono sto se nalazi u entity feature
+export default interface ApiFeatureDto
+{
+    featureId:number;
+    name:string;
+    categoryId:number;
+}
