@@ -54,6 +54,64 @@ export default function api(path:string,
     
 }
 
+export  function apiFile(path:string,
+    method:string,
+    name:string,
+    file:File,
+   role:'user'|'administrator'='user' //neophodna da bi se znalo koji se token koristi
+   )
+{
+   return new Promise<ApiResponse>((resolve)=>{
+
+    const formData=new FormData();
+    formData.append(name, file)
+
+       const requestData:AxiosRequestConfig={
+           method:'post',
+           url:path,
+           baseURL:ApiConfig.API_URL,
+           data:formData,
+           headers:{
+               'Content-Type': 'multipart/form-data',
+               'Authorization':getToken(role)
+           }
+       };
+       axios(requestData)
+       .then(res=>responseHandler(res,resolve))
+       .catch(async err=>{
+           if(err.response.status===401)
+           {
+               
+               const newToken= await refreshToken(role);
+
+               if(!newToken)
+               {
+                   const response:ApiResponse={
+                       status:'login',
+                       data:null
+                   };
+                   return resolve(response);
+               }
+
+               saveToken(role, newToken);
+
+               requestData.headers['Authorization'] = getToken(role);
+
+               return await repeatRequest(requestData, resolve);
+           }
+
+
+           const response:ApiResponse={
+               status:'error',
+               data:err
+           };
+
+           resolve(response);
+       });
+   });
+   
+}
+
 //podaci koji stizu od API-ja
 export interface ApiResponse{
     status:'ok'|'error'|'login',

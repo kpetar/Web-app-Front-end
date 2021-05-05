@@ -81,7 +81,6 @@ interface AdministratorDashboardState{
 
                   <ul>
                     <li><Link to="/administrator/dashboard/category/">Categories</Link></li>
-                    <li><Link to="/administrator/dashboard/feature/">Feature</Link></li>
                     <li><Link to="/administrator/dashboard/article/">Articles</Link></li>
 
                   </ul>
