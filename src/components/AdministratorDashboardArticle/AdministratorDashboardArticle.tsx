@@ -1,4 +1,4 @@
-import {  faEdit, faList, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {  faEdit, faList, faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Alert, Button, Card, Col, Container, Form, Modal, Row, Table} from 'react-bootstrap';
@@ -8,6 +8,7 @@ import ApiArticleDto from '../../dtos/ApiArticleDto';
 import { ApiCategoryDto } from '../../dtos/ApiCategoryDto';
 import ArticleType from '../../types/ArticleType';
 import CategoryType from '../../types/CategoryTypes';
+import FeatureType from '../../types/FeatureType';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
 interface AdministratorDashboardArticleState{
@@ -161,6 +162,40 @@ interface FeatureBaseType{
     })));
   }
 
+  private setEditModalFeatureUse(featureId:number, use:boolean)
+  {
+    const editFeatures:{featureId:number; use:number;}[] = [...this.state.editModal.features];
+    for(const feature of editFeatures)
+    {
+        if(feature.featureId=== featureId)
+        {
+            feature.use= use ? 1 :0;
+            break;
+        }
+    }
+
+    this.setState(Object.assign(this.state,Object.assign(this.state.editModal,{
+        features:editFeatures
+    })));
+  }
+
+  private setEditModalFeatureValue(featureId:number, value:string)
+  {
+    const editFeatures:{featureId:number; value:string;}[] = [...this.state.editModal.features];
+    for(const feature of editFeatures)
+    {
+        if(feature.featureId=== featureId)
+        {
+            feature.value=value;
+            break;
+        }
+    }
+
+    this.setState(Object.assign(this.state,Object.assign(this.state.editModal,{
+        features:editFeatures
+    })));
+  }
+
 
   private setEditModalVisibleState(newState:boolean)
   {
@@ -292,6 +327,7 @@ interface FeatureBaseType{
         articlePrices:article.articlePrices,
         photos:article.photos,
         category:article.category,
+        categoryId:article.categoryId,
       };
     });
 
@@ -419,32 +455,10 @@ interface FeatureBaseType{
                                 onChange={(e)=>this.setAddModalStringFieldState('description', e.target.value)}
                                 rows={10}/>
                     </Form.Group>
-                   
-                   {/*
-                    <Form.Group>
-                    <Form.Label htmlFor="add-status">Status</Form.Label>
-                        <Form.Control id="add-status" as="select" value={this.state.addModal.status.toString()}
-                                onChange={(e)=>this.setAddModalStringFieldState('status', e.target.value)}>
-                                   <option value="available">Available</option>
-                                    <option value="visible">Visible</option>
-                                    <option value="hidden">Hidden</option>
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group>
-                    <Form.Label htmlFor="add-isPromoted">Promoted</Form.Label>
-                        <Form.Control id="add-isPromoted" as="select" value={this.state.addModal.isPromoted.toString()}
-                                onChange={(e)=>this.setAddModalNumberFieldState('isPromoted', e.target.value)}>
-                                <option value="0">Not promoted</option>
-                                <option value="1">Is promoted</option>
-                        </Form.Control>
-                    </Form.Group>
-
-                   */}
-
                     <Form.Group>
                         <Form.Label htmlFor="add-price">Price</Form.Label>
                         <Form.Control id="add-price" type="number" step={0.01} min={0.01} value={this.state.addModal.price}
-                                onChange={(e)=>this.setAddModalNumberFieldState('name', e.target.value)}/>
+                                onChange={(e)=>this.setAddModalNumberFieldState('price', e.target.value)}/>
                     </Form.Group>
 
                     <div>
@@ -467,6 +481,66 @@ interface FeatureBaseType{
                 </Modal.Body>
             </Modal>
 
+            <Modal size="lg" centered show={this.state.editModal.visible} 
+                    onHide={()=>this.setEditModalVisibleState(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit article</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group>
+                        <Form.Label htmlFor="edit-name">Name</Form.Label>
+                        <Form.Control id="edit-name" type="text" value={this.state.editModal.name}
+                                onChange={(e)=>this.setEditModalStringFieldState('name', e.target.value)}/>
+                    </Form.Group>
+                    <Form.Group>
+                    <Form.Label htmlFor="edit-excerpt">Short text</Form.Label>
+                        <Form.Control id="excerpt" type="text" value={this.state.editModal.excerpt}
+                                onChange={(e)=>this.setEditModalStringFieldState('excerpt', e.target.value)}/>
+                    </Form.Group>
+                    <Form.Group>
+                    <Form.Label htmlFor="edit-description">Detailed text</Form.Label>
+                        <Form.Control id="edit-description" as="textarea" value={this.state.editModal.description}
+                                onChange={(e)=>this.setEditModalStringFieldState('description', e.target.value)}
+                                rows={10}/>
+                    </Form.Group>
+                    <Form.Group>
+                    <Form.Label htmlFor="edit-status">Status</Form.Label>
+                        <Form.Control id="edit-status" as="select" value={this.state.editModal.status.toString()}
+                                onChange={(e)=>this.setEditModalStringFieldState('status', e.target.value)}>
+                                    <option value="available">Available</option>
+                                    <option value="visible">Visible</option>
+                                    <option value="hidden">Hidden</option>
+                        </Form.Control>
+                    </Form.Group>
+                    <Form.Group>
+                    <Form.Label htmlFor="edit-isPromoted">Promoted</Form.Label>
+                        <Form.Control id="edit-isPromoted" as="select" value={this.state.editModal.isPromoted.toString()}
+                                onChange={(e)=>this.setEditModalNumberFieldState('isPromoted', e.target.value)}>
+                                <option value="0">Not promoted</option>
+                                <option value="1">Is promoted</option>
+                        </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label htmlFor="edit-price">Price</Form.Label>
+                        <Form.Control id="edit-price" type="number" step={0.01} min={0.01} value={this.state.editModal.price}
+                                onChange={(e)=>this.setEditModalNumberFieldState('price', e.target.value)}/>
+                    </Form.Group>
+
+                    <div>
+                        {this.state.editModal.features.map(this.printEditModalFeatureInput, this)}
+                    </div>
+
+                    <Form.Group>
+                        <Button variant="primary" onClick={()=>this.doEditArticle()}>
+                            <FontAwesomeIcon icon={faSave}/>Edit article
+                        </Button>
+                    </Form.Group>
+                    {this.state.editModal.message ? (
+                        <Alert variant="danger" value={this.state.editModal.message}/>
+                    ) : ''}
+                </Modal.Body>
+            </Modal>
       </Container>
       
     );
@@ -477,16 +551,37 @@ interface FeatureBaseType{
     return (
         <Form.Group>
             <Row>
-                <Col xs="4" sm="2" className="text-center">
+                <Col xs="4" sm="1" className="text-center">
                 <input type="checkbox" value="1" checked={feature.use === 1}
                     onChange={ (e)=> this.setAddModalFeatureUse(feature.featureId, e.target.checked)}/>
                 </Col>
-                <Col xs="8" sm="5">
+                <Col xs="8" sm="3">
                     {feature.name}
                 </Col>
-                <Col xs="12" sm="5">
+                <Col xs="12" sm="8">
                 <Form.Control type="text" value={feature.value} 
                                 onChange={(e)=>this.setAddModalFeatureValue(feature.featureId, e.target.value)}/>
+                </Col>
+            </Row>
+       </Form.Group>
+    );
+  }
+
+  private printEditModalFeatureInput(feature:any)
+  {
+    return (
+        <Form.Group>
+            <Row>
+                <Col xs="4" sm="1" className="text-center">
+                <input type="checkbox" value="1" checked={feature.use === 1}
+                    onChange={ (e)=> this.setEditModalFeatureUse(feature.featureId, e.target.checked)}/>
+                </Col>
+                <Col xs="8" sm="3">
+                    {feature.name}
+                </Col>
+                <Col xs="12" sm="8">
+                <Form.Control type="text" value={feature.value} 
+                                onChange={(e)=>this.setEditModalFeatureValue(feature.featureId, e.target.value)}/>
                 </Col>
             </Row>
        </Form.Group>
@@ -558,14 +653,27 @@ interface FeatureBaseType{
       });
   }
 
+
   private async uploadArticlePhoto(articleId:number, file: File)
   {
     return await apiFile('/api/article/'+ articleId + '/uploadPhoto/','post', 'photo', file, 'administrator');
   }
 
-  private doEdtArticle()
+  private doEditArticle()
   {
     api('/api/article/' + this.state.editModal.articleId, 'patch',{
+          name:this.state.editModal.name,
+          excerpt:this.state.editModal.excerpt,
+          description:this.state.editModal.description,
+          price:this.state.editModal.price,
+          status:this.state.editModal.status,
+          isPromoted:this.state.editModal.isPromoted,
+          features:this.state.editModal.features
+          .filter(feature=>feature.use===1)
+          .map(feature=>({
+              featureId:feature.featureId,
+              value:feature.value
+          }))
       }, 'administrator')
       .then((res:ApiResponse)=>{
           if(res.status==='login')
@@ -585,10 +693,47 @@ interface FeatureBaseType{
       });
   }
 
-  private showEditModal(article:ArticleType) {
-    this.setEditModalStringFieldState('name',String(article.name));
+  private async showEditModal(article:ArticleType) {
     this.setEditModalStringFieldState('message','');
     this.setEditModalNumberFieldState('articleId', article.articleId);
+    this.setEditModalStringFieldState('name',String(article.name));
+    this.setEditModalStringFieldState('excerpt',String(article.excerpt));
+    this.setEditModalStringFieldState('description',String(article.description));
+    this.setEditModalStringFieldState('status',String(article.status));
+    this.setEditModalNumberFieldState('price', article.price);
+    this.setEditModalNumberFieldState('isPromoted', article.isPromoted);
+
+    if(!article.categoryId)
+    {
+        return;
+    }
+
+    const categoryId:number=article.categoryId;
+    
+
+    const allFeatures:any[]=await this.getFeaturesForCategoryId(categoryId);
+    for(const apiFeature of allFeatures)
+    {
+        apiFeature.use=0;
+        apiFeature.value='';
+        if(!article.articleFeatures)
+        {
+            continue;
+        }
+        for(const articleFeature of article.articleFeatures)
+        {
+            if(articleFeature.featureId=== apiFeature.featureId)
+            {
+                apiFeature.use=1;
+                apiFeature.value=articleFeature.value;
+            }
+        }
+    }
+
+    this.setState(Object.assign(this.state,Object.assign(this.state.editModal,{
+        features:allFeatures
+    })));
+
     this.setEditModalVisibleState(true);
   }
   
