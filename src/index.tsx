@@ -21,6 +21,7 @@ import AdministratorDashboardCategory from './components/AdministratorDashboardC
 import AdministratorDashboardFeature from './components/AdministratorDashboardFeature/AdministratorDashboardFeature';
 import AdministratorDashboardArticle from './components/AdministratorDashboardArticle/AdministratorDashboardArticle';
 import AdministratorDashboardPhoto from './components/AdministratorDashboardPhoto/AdministratorDashboardPhoto';
+import ArticlePage from './components/ArticlePage/ArticlePage';
 
 
 ReactDOM.render(
@@ -31,6 +32,7 @@ ReactDOM.render(
         <Route path="/contact" component={ContactPage}></Route>
         <Route path="/user/login" component={UserLoginPage}></Route>
         <Route path="/category/:cId" component={CategoryPage}></Route>
+        <Route path="/article/:aId" component={ArticlePage}></Route>
         <Route path="/user/register" component={UserRegistrationPage}></Route>
         <Route path="/cart/orders" component={OrderPage}></Route>
         <Route path="/administrator/login" component={AdministratorLoginPage}></Route>
