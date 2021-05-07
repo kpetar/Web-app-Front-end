@@ -22,6 +22,7 @@ import AdministratorDashboardFeature from './components/AdministratorDashboardFe
 import AdministratorDashboardArticle from './components/AdministratorDashboardArticle/AdministratorDashboardArticle';
 import AdministratorDashboardPhoto from './components/AdministratorDashboardPhoto/AdministratorDashboardPhoto';
 import ArticlePage from './components/ArticlePage/ArticlePage';
+import AdministratorDashboardOrder from './components/AdministratorDashboardOrder/AdministratorDashboardOrder';
 
 
 ReactDOM.render(
@@ -29,18 +30,19 @@ ReactDOM.render(
     <HashRouter>
       <Switch>
         <Route exact path="/" component={HomePage}></Route>
-        <Route path="/contact" component={ContactPage}></Route>
-        <Route path="/user/login" component={UserLoginPage}></Route>
-        <Route path="/category/:cId" component={CategoryPage}></Route>
-        <Route path="/article/:aId" component={ArticlePage}></Route>
-        <Route path="/user/register" component={UserRegistrationPage}></Route>
-        <Route path="/cart/orders" component={OrderPage}></Route>
+        <Route path="/contact/" component={ContactPage}></Route>
+        <Route path="/user/login/" component={UserLoginPage}></Route>
+        <Route path="/category/:cId/" component={CategoryPage}></Route>
+        <Route path="/article/:aId/" component={ArticlePage}></Route>
+        <Route path="/user/register/" component={UserRegistrationPage}></Route>
+        <Route path="/cart/orders/" component={OrderPage}></Route>
         <Route path="/administrator/login" component={AdministratorLoginPage}></Route>
         <Route exact path="/administrator/dashboard/" component={AdministratorDashboard}></Route>
         <Route path="/administrator/dashboard/category/" component={AdministratorDashboardCategory}></Route>
         <Route path="/administrator/dashboard/feature/:cId" component={AdministratorDashboardFeature}></Route>
         <Route path="/administrator/dashboard/article/" component={AdministratorDashboardArticle}></Route>
         <Route path="/administrator/dashboard/photo/:aId" component={AdministratorDashboardPhoto}></Route>
+        <Route path="/administrator/dashboard/order/" component={AdministratorDashboardOrder}></Route>
       </Switch>
     </HashRouter>
   </React.StrictMode>,
