@@ -195,6 +195,15 @@ export function getIdentity(role:'user'|'administrator'):string
     return 'Bearer ' + token;
 }
 
+//funkcija koja u potpunosti uklanja podatka za ulogovanog korisnika
+export function removeTokenData(role:'user'|'administrator')
+{
+    localStorage.removeItem('api_token' + role);
+    localStorage.removeItem('api_refresh_token' + role);
+    localStorage.removeItem('api_identity' + role);
+
+}
+
 export function saveRefreshToken(role:'user'|'administrator', token:string)
 {
     localStorage.setItem('api_refresh_token' + role,token);
