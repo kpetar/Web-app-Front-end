@@ -6,7 +6,7 @@ import api, { ApiResponse } from "../../api/api";
 import CartType from "../../types/CartType";
 
 interface CartState{
-    quantity:number;
+    count:number;
     cart?:CartType;
     visible:boolean;
     message:string;
@@ -24,7 +24,7 @@ export default class Cart extends React.Component{
         super(props);
 
         this.state={
-            quantity:0,
+            count:0,
             visible:false,
             message:'',
             cartMenuColor:'#000000'
@@ -43,10 +43,10 @@ export default class Cart extends React.Component{
     }
 
     
-    private setStateCount(newQuantity:number)
+    private setStateCount(newCount:number)
     {
         this.setState(Object.assign(this.state,{
-            quantity:newQuantity
+            count:newCount
         }));
     }
     private setStateCart(newCart?:CartType)
@@ -62,11 +62,25 @@ export default class Cart extends React.Component{
         }));
     }
 
+    private setMessageState(newMessage:string)
+    {
+        this.setState(Object.assign(this.state,{
+            message:newMessage
+        }));
+    }
+
+    private setStateMenuColor(newColor:string)
+    {
+        this.setState(Object.assign(this.state,{
+            cartMenuColor:newColor
+        }));
+    }
+
     private updateCart()
     {
         api('/api/cart/', 'get',{})
         .then((res:ApiResponse)=>{
-            if(res.status==='error' || res.status==='login')
+            if(res.status === 'error' || res.status === 'login')
             {
                 this.setStateCount(0);
                 this.setStateCart(undefined);
@@ -83,16 +97,10 @@ export default class Cart extends React.Component{
 
     }
 
-    private hideCart()
-    {
-        this.setMessageState('');
-        this.setStateVisible(false);
-    }
-
     private calculateSum():number
     {
         let sum:number=0;
-        if(this.state.cart===undefined)
+        if(this.state.cart === undefined)
         {
             return sum;
         }
@@ -100,10 +108,25 @@ export default class Cart extends React.Component{
         {
             for(const item of this.state.cart?.cartArticles)
             {
-                sum+=item.article.articlePrices[item.article.articlePrices.length-1].price*item.quantity;
+                sum += item.article.articlePrices[item.article.articlePrices.length-1].price * item.quantity;
             }
         }
         return sum;
+    }
+
+    private sendCartUpdate(data:any)
+    {
+        api('/api/cart/', 'patch', data)
+        .then((res:ApiResponse)=>{
+            if(res.status === 'error'|| res.status === 'login')
+            {
+                this.setStateCount(0);
+                this.setStateCart(undefined);
+                return;
+            }
+            this.setStateCart(res.data);
+            this.setStateCount(res.data.cartArticles.length);
+        });
     }
 
     private updateQuantity(event:React.ChangeEvent<HTMLInputElement>)
@@ -113,22 +136,7 @@ export default class Cart extends React.Component{
 
         this.sendCartUpdate({
             articleId:Number(articleId),
-            quantity:Number(newQuantity)
-        });
-    }
-
-    private sendCartUpdate(data:any)
-    {
-        api('/api/cart/', 'patch',data)
-        .then((res:ApiResponse)=>{
-            if(res.status='error'||res.status==='login')
-            {
-                this.setStateCount(0);
-                this.setStateCart(undefined);
-                return;
-            }
-            this.setStateCart(res.data);
-            this.setStateCount(res.data.cartArticles.length);
+            quantity:Number(newQuantity),
         });
     }
 
@@ -140,37 +148,31 @@ export default class Cart extends React.Component{
         });
     }
 
-    private setMessageState(newMessage:string)
-    {
-        this.setState(Object.assign(this.state,{
-            message:newMessage
-        }))
-    }
-
     private makeOrder()
     {
         api('/api/cart/makeAnOrder/','post',{})
         .then((res:ApiResponse)=>{
-            if(res.status='error'||res.status==='login')
+            if(res.status ==='error' || res.status==='login')
             {
                 this.setStateCount(0);
                 this.setStateCart(undefined);
                 return;
             }
-            this.setMessageState('Your order has been made');
+
+            this.setMessageState('Vaša narudžba je uspješno izvršena.');
 
             this.setStateCart(undefined);
             this.setStateCount(0);
         });
     }
 
-    private setStateMenuColor(newCartMenuColor:string)
+    private hideCart()
     {
-        this.setState(Object.assign(this.state,{
-            cartMenuColor:newCartMenuColor
-        }))
+        this.setMessageState('');
+        this.setStateVisible(false);
     }
 
+   
 
     render()
     {
@@ -181,23 +183,23 @@ export default class Cart extends React.Component{
             <>
             <Nav.Item>
                 <Nav.Link active={false} onClick={()=>this.setStateVisible(true)} style={{color:this.state.cartMenuColor}}>
-                <FontAwesomeIcon icon={faCartArrowDown}/> ({this.state.quantity})
+                <FontAwesomeIcon icon={faCartArrowDown}/> ({this.state.count})
                 </Nav.Link>
             </Nav.Item>
 
             <Modal size="lg" centered show={this.state.visible} onHide={()=>this.hideCart()}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Your shopping cart</Modal.Title>
+                    <Modal.Title>Vaša korpa</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Table hover size="sm">
                         <thead>
                             <tr>
-                                <th>Category</th>
-                                <th>Article</th>
-                                <th className="text-right">Quantity</th>
-                                <th className="text-right">Price</th>
-                                <th className="text-right">Total</th>
+                                <th>Kategorija</th>
+                                <th>Artikal</th>
+                                <th className="text-right">Količina</th>
+                                <th className="text-right">Cijena</th>
+                                <th className="text-right">Ukupno</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -210,10 +212,10 @@ export default class Cart extends React.Component{
                                     <tr>
                                         <td>{item.article.category.name}</td>
                                         <td>{item.article.name}</td>
-                                        <td>
+                                        <td className="text-right">
                                         <Form.Control type="number" step="1" min="1" value={item.quantity}
-                                                        onChange={(event)=>this.updateQuantity(event as any)}
-                                                        data-article-id={item.article.articleId}/>
+                                                        data-article-id={item.article.articleId}
+                                                        onChange={(e)=>this.updateQuantity(e as any)}/>
                                         </td>
                                         <td className="text-right">{price} KM</td>
                                         <td className="text-right">{total} KM</td>
@@ -230,19 +232,19 @@ export default class Cart extends React.Component{
                                 <td></td>
                                 <td></td>
                                 <td className="text-right">
-                                    <strong>Total</strong>
+                                    <strong>Ukupno</strong>
                                     </td>
                                 <td className="text-right">{Number(sum).toFixed(2)}</td>
                                 <td></td>
                             </tr>
                         </tfoot>
                     </Table>
-                    <Alert variant="success" className={this.state.message ? '' : 'd-none' }>
+                    <Alert variant="success" className={ this.state.message ? '' : 'd-none' }> { this.state.message}
                     </Alert>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={()=>this.makeOrder()} disabled={this.state.cart?.cartArticles.length===0}>
-                        Make an order
+                    <Button variant="primary" disabled={ this.state.cart?.cartArticles.length === 0} onClick={()=> this.makeOrder()} >
+                        Poruči
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -251,3 +253,4 @@ export default class Cart extends React.Component{
     }
 
 }
+
