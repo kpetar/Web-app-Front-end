@@ -7,6 +7,7 @@ import api, { ApiResponse } from "../../api/api";
 import CartType from "../../types/CartType";
 import OrderType from "../../types/OrderType";
 import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";
+import orderPage from '../SingleArticle/SingleArticle.module.css';
 
 //indikator da li je korisnik ulogovan
 interface OrdersPageState{
@@ -30,16 +31,16 @@ interface OrderDto{
                 articleId:number;
                 name:string;
                 excerpt:string;
-                status:"available"|"visible"|"hidden";
+                status:"dostupan"|"vidljiv"|"sakriven";
                 isPromoted:number;
                 category:{
                     categoryId:number;
                     name:string;
-                };
+                },
                 articlePrices:{
                     createdAt:string;
                     price:number;
-                }[];
+                }[],
                 photos:{
                     imagePath:string;
                 }[];
@@ -171,17 +172,17 @@ export default class OrderPage extends React.Component{
         return(
             <Container>
                 <RoledMainMenu role='user'/>
-                <Card>
+                <Card className={orderPage.Order}>
                     <Card.Body>
                         <Card.Title>
-                            <FontAwesomeIcon icon={faBox}/> My Orders
+                            <FontAwesomeIcon icon={faBox}/> Moje narudžbe
                         </Card.Title>
 
                         <Table hover size="sm">
                         <thead>
                             <tr>
-                                <th>Created at</th>
-                                <th>Status</th>
+                                <th> Kreirano</th>
+                                <th> Status</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -194,17 +195,17 @@ export default class OrderPage extends React.Component{
 
                 <Modal size="lg" centered show={this.state.cartVisible} onHide={()=>this.hideCart()}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Your shopping cart</Modal.Title>
+                    <Modal.Title> Vaša korpa</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Table hover size="sm">
-                        <thead>
+                        <thead className={orderPage.CartPage}>
                             <tr>
-                                <th>Category</th>
-                                <th>Article</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Total</th>
+                                <th> Kategorija</th>
+                                <th> Artikal</th>
+                                <th className="text-right"> Količina</th>
+                                <th className="text-right"> Cijena</th>
+                                <th className="text-right"> Ukupno</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -217,19 +218,20 @@ export default class OrderPage extends React.Component{
                                         <td>{item.article.category.name}</td>
                                         <td>{item.article.name}</td>
                                         <td className="text-right">{item.quantity}</td>
-                                        <td className="text-right">{price}KM</td>
-                                        <td className="text-right">{total}KM</td>
+                                        <td className="text-right">{price} KM</td>
+                                        <td className="text-right">{total} KM</td>
                                     
                                     </tr>
                                 )
                             }, this)}
                         </tbody>
-                        <tfoot>
+                        <tfoot className={orderPage.CartPage}>
                             <tr>
                                 <td></td>
                                 <td></td>
-                                <td>Total</td>
-                                <td>{Number(sum).toFixed(0)}</td>
+                                <td></td>
+                                <td className="text-right"><strong><i> Ukupno:</i></strong></td>
+                                <td className="text-right"><strong><i> {Number(sum).toFixed(2)} KM</i></strong></td>
                             </tr>
                         </tfoot>
                     </Table>
@@ -247,14 +249,15 @@ export default class OrderPage extends React.Component{
 
     private printOrderRow(order:OrderType)
     {
+        let keyword='';
         return (
             <tr key={order.orderId}>
-                <td>{order.createdAt}</td>
-                <td>{order.status}</td>
+                <td>{order.createdAt.substr(0,19).replace('T', ' ')}</td>
+                <td>{order.status.replace('pending', 'Na čekanju')}</td>
                 <td className="text-right">
-                    <Button size="sm" block variant="primary"
+                    <Button size="sm" variant="primary"
                         onClick={()=>this.setAndShowCart(order.cart)}>
-                            <FontAwesomeIcon icon={faBoxOpen}/>
+                            Vaša korpa <FontAwesomeIcon icon={faBoxOpen}/>
                     </Button>
                 </td>
 
