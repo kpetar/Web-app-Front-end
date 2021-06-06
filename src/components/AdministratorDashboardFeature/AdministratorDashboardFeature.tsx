@@ -7,6 +7,8 @@ import api, { ApiResponse } from '../../api/api';
 import ApiFeatureDto from '../../dtos/ApiFeatureDto';
 import FeatureType from '../../types/FeatureType';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+import administratorDashFeature from '../AdministratorDashboard/AdministratorDashboard.module.css';
+
 
 interface AdministratorDashboardFeatureState{
   
@@ -174,10 +176,10 @@ interface AdministratorDashboardFeatureProperties{
     return (
       <Container>
         <RoledMainMenu role='administrator'/>
-          <Card>
+          <Card className={administratorDashFeature.CardArticle}>
               <Card.Body>
                   <Card.Title>
-                      <FontAwesomeIcon icon={faListUl}/> Features
+                      <FontAwesomeIcon icon={faListUl}/> Karakteristike
                   </Card.Title>
 
                 <Table hover size="sm" bordered>
@@ -185,19 +187,19 @@ interface AdministratorDashboardFeatureProperties{
                         <tr>
                             <th colSpan={2}>
                             <Link to="/administrator/dashboard/category/" className="btn btn-sm btn-info">
-                                    <FontAwesomeIcon icon={faBackward}/> Back to categories
+                                    <FontAwesomeIcon icon={faBackward}/> Nazad na kategorije
                                 </Link>
                             </th>
                             <th className="text-center">
                                 <Button variant="primary" size="sm"
                                         onClick={()=>this.ShowAddModal()}>
-                                    <FontAwesomeIcon icon={faPlus}/>Add
+                                    <FontAwesomeIcon icon={faPlus}/> Dodaj
                                 </Button>
                             </th>
                         </tr>
                         <tr>
-                            <th className="text-right">ID</th>
-                            <th>Name</th>
+                            <th className="text-right"> Redni broj</th>
+                            <th> Naziv </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -209,7 +211,7 @@ interface AdministratorDashboardFeatureProperties{
                                 <td className="text-center">
                                 <Button variant="info" size="sm"
                                         onClick={()=>this.showEditModal(feature)}>
-                                    <FontAwesomeIcon icon={faEdit}/>Edit
+                                    <FontAwesomeIcon icon={faEdit}/> Izmjeni
                                 </Button>
                                 </td>
                             </tr>
@@ -221,18 +223,18 @@ interface AdministratorDashboardFeatureProperties{
 
             <Modal size="lg" centered show={this.state.addModal.visible} onHide={()=>this.setAddModalVisibleState(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add new feature</Modal.Title>
+                    <Modal.Title> Dodaj novu karakteristiku</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group>
-                        <Form.Label htmlFor="name">Name</Form.Label>
+                        <Form.Label htmlFor="name"> Naziv </Form.Label>
                         <Form.Control id="name" type="text" value={this.state.addModal.name}
                                 onChange={(e)=>this.setAddModalStringFieldState('name', e.target.value)}/>
                     </Form.Group>
                     
                     <Form.Group>
                         <Button variant="primary" onClick={()=>this.doAddFeature()}>
-                            <FontAwesomeIcon icon={faPlus}/>Add new feature
+                            <FontAwesomeIcon icon={faPlus}/> Dodaj 
                         </Button>
                     </Form.Group>
                     {this.state.addModal.message ? (
@@ -243,18 +245,18 @@ interface AdministratorDashboardFeatureProperties{
 
             <Modal size="lg" centered show={this.state.editModal.visible} onHide={()=>this.setEditModalVisibleState(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit feature</Modal.Title>
+                    <Modal.Title> Izmjeni karakteristiku</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group>
-                        <Form.Label htmlFor="name">Name</Form.Label>
+                        <Form.Label htmlFor="name"> Naziv</Form.Label>
                         <Form.Control id="name" type="text" value={this.state.editModal.name}
                                 onChange={(e)=>this.setEditModalStringFieldState('name', e.target.value)}/>
                     </Form.Group>
                     
                     <Form.Group>
                         <Button variant="primary" onClick={()=>this.doEdtFeature()}>
-                            <FontAwesomeIcon icon={faEdit}/>Edit feature
+                            <FontAwesomeIcon icon={faEdit}/> Izmjeni
                         </Button>
                     </Form.Group>
                     {this.state.editModal.message ? (
