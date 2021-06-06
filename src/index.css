@@ -2,3 +2,10 @@
     margin: 0px;
     padding: 0px;
 }
+
+body
+{
+    background-image: url(/src/image/computer-1343392_1280.jpg); 
+    background-size: cover;
+    background-repeat: no-repeat;
+}

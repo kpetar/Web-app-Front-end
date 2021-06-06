@@ -1,0 +1,55 @@
+
+.Card
+{
+    background-color: transparent;
+}
+
+.CardBody
+{
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to right, rgb(32, 34, 33), rgb(238, 215, 219));
+    border-radius: 25px;
+}
+
+.CardTitle
+{
+    color: whitesmoke;
+    font-size: xx-large;
+    font-style: oblique;
+    text-align: center;
+    
+}
+
+.CardBorder
+{
+    border:3px solid black;
+    border-radius: 25px;
+}
+
+.CardText
+{
+    color: black;
+    font-style: italic;
+    font-size: x-large;
+    text-align: center;
+}
+
+.Button{
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 25px;
+    margin-left: 10px;
+    padding: 5px;
+}
+
+.Button:hover{
+    color: yellow;
+    text-decoration: none;
+}
+
+.Image
+{
+    border-radius: 25px;
+}

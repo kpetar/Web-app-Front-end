@@ -1,0 +1,15 @@
+.Card
+{
+    background-color: whitesmoke;
+}
+
+.Li
+{
+    list-style: none;
+}
+
+.CartPage
+{
+    border: 3px solid darkgray;
+    background-color: whitesmoke;
+}

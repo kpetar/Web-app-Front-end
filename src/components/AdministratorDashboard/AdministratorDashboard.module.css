@@ -1,0 +1,47 @@
+.Card
+{
+    background-color: transparent;
+}
+
+.CardArticle
+{
+    background-color: whitesmoke;
+}
+
+.CardBorder
+{
+    border: 1px solid rgb(102, 64, 64);
+    border-radius: 29px;
+}
+
+.CardTitleOne
+{
+    color: whitesmoke;
+    font-size: xx-large;
+    font-style: oblique;
+    margin-bottom: 15px;
+}
+
+.CardTitleTwo
+{
+    text-align: center;
+    font-size: x-large;
+}
+
+.Link
+{
+    border: 1px solid black;
+    border-radius: 25px;
+}
+
+.Link:hover
+{
+    background-color: darkgray;
+    color: whitesmoke;
+}
+
+.Image
+{
+    border: 1px solid transparent;
+    border-radius: 29px;
+}
