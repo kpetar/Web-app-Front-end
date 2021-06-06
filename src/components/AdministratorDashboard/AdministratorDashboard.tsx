@@ -1,10 +1,14 @@
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { Card, Container} from 'react-bootstrap';
-import {  Link, Redirect } from 'react-router-dom';
-import api, { ApiResponse, getIdentity } from '../../api/api';
+import {  Card, Col, Container, Image, Row} from 'react-bootstrap';
+import { Link, Redirect } from 'react-router-dom';
+import api, { ApiResponse } from '../../api/api';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+import kategorijaSlika from '../../image/kategorije.jpg';
+import artikliSlika from '../../image/laptops.png';
+import orderSlika from '../../image/order.png';
+import administratorDashCss from './AdministratorDashboard.module.css';
 
 interface AdministratorDashboardState{
   
@@ -73,17 +77,52 @@ interface AdministratorDashboardState{
     return (
       <Container>
         <RoledMainMenu role='administrator'/>
-          <Card>
+          <Card className={administratorDashCss.Card}>
               <Card.Body>
-                  <Card.Title>
-                      <FontAwesomeIcon icon={faHome}/> Administrator Dashboard
-                  </Card.Title>
+                  <div className={administratorDashCss.CardTitleOne}>
+                      <FontAwesomeIcon icon={faHome}/> Administrator 
+                  </div>
+                  
+                  <Row>
+                    <Col lg="4">
+                  <Card style={{ width: '18rem' }} className={`${administratorDashCss.CardBorder} "mb-3"`}>
+                  <Image src={kategorijaSlika} fluid className={`${administratorDashCss.Image} "card-img-top"`}/>
+                  <Card.Body>
+                    <Card.Title className={administratorDashCss.CardTitleTwo}><h3> Kategorije</h3></Card.Title>
+                    <Card.Text>
+                      <p> Izmjeni kategoriju</p>
+                    </Card.Text>
+                    <Link className={`${administratorDashCss.Link} btn btn-block`} to="/administrator/dashboard/category/"> Kategorije</Link>
+                  </Card.Body>
+                </Card>
+                </Col>
 
-                  <ul>
-                    <li><Link to="/administrator/dashboard/category/">Categories</Link></li>
-                    <li><Link to="/administrator/dashboard/article/">Articles</Link></li>
-                    <li><Link to="/administrator/dashboard/order/">Orders</Link></li>
-                  </ul>
+                <Col lg="4">
+                <Card style={{ width: '18rem' }} className={`${administratorDashCss.CardBorder} "mb-3 "`}>
+                <Image src={artikliSlika} fluid className={`${administratorDashCss.Image} "card-img-top"`}/>
+                  <Card.Body>
+                    <Card.Title className={administratorDashCss.CardTitleTwo}><h3> Artikli</h3></Card.Title>
+                    <Card.Text>
+                      <p> Izmjeni artikal</p>
+                    </Card.Text>
+                    <Link className={`${administratorDashCss.Link} btn btn-block`} to="/administrator/dashboard/article/"> Artikli</Link>
+                  </Card.Body>
+                </Card>
+                </Col>
+
+                <Col lg="4">
+                <Card style={{ width: '18rem' }} className={`${administratorDashCss.CardBorder} "mb-3"`}>
+                <Image src={orderSlika} fluid className={`${administratorDashCss.Image} "card-img-top"`}/>
+                  <Card.Body>
+                    <Card.Title className={administratorDashCss.CardTitleTwo}><h3> Porudžbine</h3></Card.Title>
+                    <Card.Text>
+                      <p> Upravljaj porudžbinama</p>
+                    </Card.Text>
+                    <Link className={`${administratorDashCss.Link} btn btn-block`} to="/administrator/dashboard/order/"> Porudžbine</Link>
+                  </Card.Body>
+                </Card>
+                </Col>
+                </Row>
               </Card.Body>
           </Card>
       </Container>
