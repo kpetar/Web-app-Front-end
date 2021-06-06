@@ -8,8 +8,8 @@ import ApiArticleDto from '../../dtos/ApiArticleDto';
 import { ApiCategoryDto } from '../../dtos/ApiCategoryDto';
 import ArticleType from '../../types/ArticleType';
 import CategoryType from '../../types/CategoryTypes';
-import FeatureType from '../../types/FeatureType';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+import administratorDashArticle from '../AdministratorDashboard/AdministratorDashboard.module.css';
 
 interface AdministratorDashboardArticleState{
   
@@ -366,30 +366,29 @@ interface FeatureBaseType{
     return (
       <Container>
         <RoledMainMenu role='administrator'/>
-          <Card>
+          <Card className={administratorDashArticle.CardArticle}>
               <Card.Body>
                   <Card.Title>
-                      <FontAwesomeIcon icon={faList}/> Categories
+                      <FontAwesomeIcon icon={faList}/> Kategorije
                   </Card.Title>
 
                 <Table hover size="sm" bordered>
                     <thead>
                         <tr>
-                            <th colSpan={6}></th>
+                            <th colSpan={5}></th>
                             <th className="text-center">
                                 <Button variant="primary" size="sm"
                                         onClick={()=>this.ShowAddModal()}>
-                                    <FontAwesomeIcon icon={faPlus}/>Add
+                                    <FontAwesomeIcon icon={faPlus}/> Dodaj
                                 </Button>
                             </th>
                         </tr>
                         <tr>
-                            <th className="text-right">ID</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Status</th>
-                            <th>Promoted</th>
-                            <th className="text-right">Price</th>
+                            <th className="text-right"> Redni broj</th>
+                            <th> Naziv</th>
+                            <th> Kategorija</th>
+                            <th> Promovisan</th>
+                            <th className="text-right"> Cijena</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -399,17 +398,16 @@ interface FeatureBaseType{
                                 <td className="text-right">{article.articleId}</td>
                                 <td>{article.name}</td>
                                 <td>{article.category?.name}</td>
-                                <td>{article.status}</td>
-                                <td>{article.isPromoted ? 'Yes' : 'No'}</td>
+                                <td>{article.isPromoted ? 'Da' : 'Ne'}</td>
                                 <td className="text-right">{article.price}</td>
                                 <td className="text-center">
                                     <Link to={"/administrator/dashboard/photo/" + article.articleId} 
                                             className="btn btn-sm btn-info mr-3">
-                                                <FontAwesomeIcon icon={faImages}/>Photos
+                                                <FontAwesomeIcon icon={faImages}/> Fotografije
                                             </Link>
                                 <Button variant="info" size="sm"
                                         onClick={()=>this.showEditModal(article)}>
-                                    <FontAwesomeIcon icon={faEdit}/>Edit
+                                    <FontAwesomeIcon icon={faEdit}/> Izmjeni
                                 </Button>
                                 </td>
                             </tr>
@@ -429,11 +427,11 @@ interface FeatureBaseType{
                         }
                     } }>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add new article</Modal.Title>
+                    <Modal.Title> Dodaj novi artikal</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                 <Form.Group>
-                    <Form.Label htmlFor="add-categoryId">Category</Form.Label>
+                    <Form.Label htmlFor="add-categoryId"> Kategorija</Form.Label>
                         <Form.Control id="add-categoryId" as="select" value={this.state.addModal.categoryId.toString()}
                                 onChange={(e)=>this.addModalCategoryChanged(e as any)}>
                                     {this.state.categories.map(category=>(
@@ -444,23 +442,23 @@ interface FeatureBaseType{
                         </Form.Control>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label htmlFor="add-name">Name</Form.Label>
+                        <Form.Label htmlFor="add-name"> Naziv</Form.Label>
                         <Form.Control id="add-name" type="text" value={this.state.addModal.name}
                                 onChange={(e)=>this.setAddModalStringFieldState('name', e.target.value)}/>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="add-excerpt">Short text</Form.Label>
+                    <Form.Label htmlFor="add-excerpt"> Opis</Form.Label>
                         <Form.Control id="excerpt" type="text" value={this.state.addModal.excerpt}
                                 onChange={(e)=>this.setAddModalStringFieldState('excerpt', e.target.value)}/>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="add-description">Detailed text</Form.Label>
+                    <Form.Label htmlFor="add-description"> Detaljan opis</Form.Label>
                         <Form.Control id="add-description" as="textarea" value={this.state.addModal.description}
                                 onChange={(e)=>this.setAddModalStringFieldState('description', e.target.value)}
                                 rows={10}/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label htmlFor="add-price">Price</Form.Label>
+                        <Form.Label htmlFor="add-price"> Cijena</Form.Label>
                         <Form.Control id="add-price" type="number" step={0.01} min={0.01} value={this.state.addModal.price}
                                 onChange={(e)=>this.setAddModalNumberFieldState('price', e.target.value)}/>
                     </Form.Group>
@@ -470,17 +468,18 @@ interface FeatureBaseType{
                     </div>
 
                     <Form.Group>
-                        <Form.Label htmlFor="add-photo">Article photo</Form.Label>
+                        <Form.Label htmlFor="add-photo"> Fotografija artikla</Form.Label>
                         <Form.File id="add-photo" />
                     </Form.Group>
 
                     <Form.Group>
                         <Button variant="primary" onClick={()=>this.doAddArticle()}>
-                            <FontAwesomeIcon icon={faPlus}/>Add new article
+                            <FontAwesomeIcon icon={faPlus}/> Dodaj novi artikal
                         </Button>
                     </Form.Group>
                     {this.state.addModal.message ? (
-                        <Alert variant="danger" value={this.state.addModal.message}/>
+                        <Alert variant="danger" value={this.state.addModal.message}>
+                            {this.state.addModal.message}</Alert>
                     ) : ''}
                 </Modal.Body>
             </Modal>
@@ -488,45 +487,45 @@ interface FeatureBaseType{
             <Modal size="lg" centered show={this.state.editModal.visible} 
                     onHide={()=>this.setEditModalVisibleState(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit article</Modal.Title>
+                    <Modal.Title> Izmjeni artikal</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group>
-                        <Form.Label htmlFor="edit-name">Name</Form.Label>
+                        <Form.Label htmlFor="edit-name"> Naziv</Form.Label>
                         <Form.Control id="edit-name" type="text" value={this.state.editModal.name}
                                 onChange={(e)=>this.setEditModalStringFieldState('name', e.target.value)}/>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="edit-excerpt">Short text</Form.Label>
+                    <Form.Label htmlFor="edit-excerpt"> Opis</Form.Label>
                         <Form.Control id="excerpt" type="text" value={this.state.editModal.excerpt}
                                 onChange={(e)=>this.setEditModalStringFieldState('excerpt', e.target.value)}/>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="edit-description">Detailed text</Form.Label>
+                    <Form.Label htmlFor="edit-description"> Detaljan opis</Form.Label>
                         <Form.Control id="edit-description" as="textarea" value={this.state.editModal.description}
                                 onChange={(e)=>this.setEditModalStringFieldState('description', e.target.value)}
                                 rows={10}/>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="edit-status">Status</Form.Label>
+                    <Form.Label htmlFor="edit-status"> Status</Form.Label>
                         <Form.Control id="edit-status" as="select" value={this.state.editModal.status.toString()}
                                 onChange={(e)=>this.setEditModalStringFieldState('status', e.target.value)}>
-                                    <option value="available">Available</option>
-                                    <option value="visible">Visible</option>
-                                    <option value="hidden">Hidden</option>
+                                    <option value="available">Dostupan</option>
+                                    <option value="visible">Vidljiv</option>
+                                    <option value="hidden">Sakriven</option>
                         </Form.Control>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="edit-isPromoted">Promoted</Form.Label>
+                    <Form.Label htmlFor="edit-isPromoted"> Promovisan</Form.Label>
                         <Form.Control id="edit-isPromoted" as="select" value={this.state.editModal.isPromoted.toString()}
                                 onChange={(e)=>this.setEditModalNumberFieldState('isPromoted', e.target.value)}>
-                                <option value="0">Not promoted</option>
-                                <option value="1">Is promoted</option>
+                                <option value="0"> Ne</option>
+                                <option value="1" > Da</option>
                         </Form.Control>
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label htmlFor="edit-price">Price</Form.Label>
+                        <Form.Label htmlFor="edit-price"> Cijena</Form.Label>
                         <Form.Control id="edit-price" type="number" step={0.01} min={0.01} value={this.state.editModal.price}
                                 onChange={(e)=>this.setEditModalNumberFieldState('price', e.target.value)}/>
                     </Form.Group>
@@ -537,11 +536,11 @@ interface FeatureBaseType{
 
                     <Form.Group>
                         <Button variant="primary" onClick={()=>this.doEditArticle()}>
-                            <FontAwesomeIcon icon={faSave}/>Edit article
+                            <FontAwesomeIcon icon={faSave}/> Izmjeni artikal
                         </Button>
                     </Form.Group>
                     {this.state.editModal.message ? (
-                        <Alert variant="danger" value={this.state.editModal.message}/>
+                        <Alert variant="danger" value={this.state.editModal.message}>{this.state.editModal.message}</Alert>
                     ) : ''}
                 </Modal.Body>
             </Modal>
@@ -616,14 +615,14 @@ interface FeatureBaseType{
 
     if(filePicker?.files.length===0)
     {
-        this.setAddModalStringFieldState('message','You must select a file to upload');
+        this.setAddModalStringFieldState('message','Morate izabrati fajl za upload');
         return;
     }
 
       api('/api/article/', 'post',{
           categoryId:this.state.addModal.categoryId,
           name:this.state.addModal.name,
-          expect:this.state.addModal.excerpt,
+          excerpt:this.state.addModal.excerpt,
           description:this.state.addModal.description,
           price:this.state.addModal.price,
           features:this.state.addModal.features
@@ -665,7 +664,7 @@ interface FeatureBaseType{
 
   private doEditArticle()
   {
-    api('/api/article/' + this.state.editModal.articleId, 'patch',{
+    api('/api/article/' + this.state.editModal.articleId + '/', 'patch',{
           name:this.state.editModal.name,
           excerpt:this.state.editModal.excerpt,
           description:this.state.editModal.description,
