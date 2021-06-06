@@ -8,6 +8,8 @@ import ArticleType from "../../types/ArticleType";
 import CategoryType from "../../types/CategoryTypes";
 import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";
 import SingleArticle from "../SingleArticle/SingleArticle";
+import './CategoryPage.css';
+
 
 //u okviru interfejsa se nalaze osobine koje se mogu naci u okviru komponente CategoryPage
 interface CategoryPageProperties{
@@ -103,7 +105,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     if(this.state.articles?.length===0)
     {
       return(
-          <div>There are no articles to show</div>
+          <div>Nema artikala za prikaz!</div>
       );
     }
     return (
@@ -116,16 +118,16 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
   private singleCategory(category:CategoryType)
   {
     return(
-      <Col md="3" lg="4" sm="6" xs="12" key={ 'Category ' + category.categoryId }>
-      <Card className="mb-3">
+      <Col md="4" lg="3" sm="6" xs="12" key={ 'Category ' + category.categoryId }>
+      <div className="CategoryBorder mb-3">
         <Card.Body>
-            <Card.Title as="p">
-                {category.name}
-            </Card.Title>
-            <Link to={`/category/${category.categoryId}`} className="btn btn-primary btn-block btn-sm">Open category
+            <div className="CategoryText">
+               <p> {category.name}</p>
+            </div>
+            <Link to={`/category/${category.categoryId}`} className="Button"> Otvori kategoriju
             </Link>
         </Card.Body>
-        </Card>
+        </div>
       </Col>
     );
   }
@@ -223,8 +225,8 @@ componentDidUpdate(oldProperties:CategoryPageProperties)
         api('api/article/searchArticle/','post',{
             categoryId:Number(this.props.match.params.cId),
             keywords:this.state.filters.keywords,
-            priceMin:this.state.filters.minPrice,
-            priceMax:this.state.filters.maxPrice,
+            minPrice:this.state.filters.minPrice,
+            maxPrice:this.state.filters.maxPrice,
             features:featureFilters,
             orderBy:orderBy,
             orderDirection:orderDirection
@@ -353,8 +355,9 @@ componentDidUpdate(oldProperties:CategoryPageProperties)
   {
       return(
           <>
-            <Form.Group>
-                <Form.Label     htmlFor="keywords">Keywords:</Form.Label>
+          <div className="Form">
+          <Form.Group>
+                <Form.Label     htmlFor="keywords">Ključne riječi:</Form.Label>
                     <Form.Control   type="text" id="keywords" value={this.state.filters.keywords}
                                      onChange={(event)=>this.setKeywordsFilter(event as any)}
                     />
@@ -363,7 +366,7 @@ componentDidUpdate(oldProperties:CategoryPageProperties)
             <Form.Group>
             <Row>
                 <Col xs="12" sm="6">
-                <Form.Label     htmlFor="minPrice">Min price:</Form.Label>
+                <Form.Label     htmlFor="minPrice">Min cijena:</Form.Label>
                     <Form.Control   type="number" id="minPrice" value={this.state.filters.minPrice}
                                     step="0.01" min="0.01" max="99999.99"
                                      onChange={(event)=>this.setMinPriceFilter(event as any)}
@@ -371,7 +374,7 @@ componentDidUpdate(oldProperties:CategoryPageProperties)
                 </Col>
 
                 <Col xs="12" sm="6">
-                <Form.Label     htmlFor="maxPrice">Max price:</Form.Label>
+                <Form.Label     htmlFor="maxPrice">Max cijena:</Form.Label>
                     <Form.Control   type="number" id="maxPrice" value={this.state.filters.maxPrice}
                                      step="0.01" min="0.02" max="100000"
                                      onChange={(event)=>this.setMaxPriceFilter(event as any)}
@@ -385,20 +388,21 @@ componentDidUpdate(oldProperties:CategoryPageProperties)
                     <Form.Control   as="select" id="sortOrder" value={this.state.filters.order} 
                                     onChange={(event)=>this.setChangeSortOrder(event as any)}
                                     >
-                    <option value="name asc">   Sort by name    -ascending</option>
-                    <option value="name desc">  Sort by name    -descending</option>
-                    <option value="price asc">  Sort by price   -ascending</option>
-                    <option value="price desc"> Sort by price   -descending</option>
+                    <option value="name asc">   Sortiraj po nazivu  - rastući</option>
+                    <option value="name desc">  Sortiraj po nazivu  - opadajući</option>
+                    <option value="price asc">  Sortiraj po cijeni  - rastuća</option>
+                    <option value="price desc"> Sortiraj po cijeni  - opadajuća</option>
                     </Form.Control>
             </Form.Group>
-
             {this.state.features.map(this.printFeatureFilterComponent, this)}
 
             <Form.Group>
                 <Button variant="primary" block onClick={()=>this.applyFilters()}>
-                    <FontAwesomeIcon icon={faSearch}/>Search
+                    <FontAwesomeIcon icon={faSearch}/> Pretraga
                 </Button>
             </Form.Group>
+          </div>
+            
           </>
       );
   }
@@ -523,6 +527,7 @@ componentDidUpdate(oldProperties:CategoryPageProperties)
   }
 
   render(){
+    
 
     if(this.state.isUserLoggedIn===false)
     {
@@ -532,13 +537,13 @@ componentDidUpdate(oldProperties:CategoryPageProperties)
     }
 
     return(
-        <Container>
+        <Container className="Container">
             <RoledMainMenu role='user'/>
-            <Card>
+            <div className="Card">
                 <Card.Body>
-                    <Card.Title>
+                    <div className="CategoryTitle mb-3">
                         <FontAwesomeIcon icon={faList}/> {this.state.category?.name}
-                    </Card.Title>
+                    </div>
                     {this.printOptionalMessage()}
 
                     {this.showSubcategories()}
@@ -551,7 +556,7 @@ componentDidUpdate(oldProperties:CategoryPageProperties)
                         </Col>
                     </Row>
                 </Card.Body>
-            </Card>
+            </div>
         </Container>
     );
 }
