@@ -10,7 +10,6 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
 import Switch from 'react-bootstrap/esm/Switch';
 import { HashRouter, Route } from 'react-router-dom';
-import ContactPage from './components/ContactPage/ContactPage';
 import UserLoginPage from './components/UserLoginPage/UserLoginPage';
 import CategoryPage from './components/CategoryPage/CategoryPage';
 import OrderPage from './components/OrdersPage/OrdersPage';
@@ -26,18 +25,16 @@ import AdministratorDashboardOrder from './components/AdministratorDashboardOrde
 import { AdministratorLogoutPage } from './components/AdministratorLogoutPage/AdministratorLogoutPage';
 import { UserLogoutPage } from './components/UserLogoutPage/UserLogoutPage';
 
-
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
       <Switch>
         <Route exact path="/" component={HomePage}></Route>
-        <Route path="/contact/" component={ContactPage}></Route>
-        <Route path="/user/login/" component={UserLoginPage}></Route>
+        <Route path="/user/login/" component={UserLoginPage} ></Route>
         <Route path="/user/logout/" component={UserLogoutPage}></Route>
         <Route path="/category/:cId/" component={CategoryPage}></Route>
         <Route path="/article/:aId/" component={ArticlePage}></Route>
-        <Route path="/user/register/" component={UserRegistrationPage}></Route>
+        <Route path="/user/register" component={UserRegistrationPage}></Route>
         <Route path="/cart/orders/" component={OrderPage}></Route>
         <Route path="/administrator/login" component={AdministratorLoginPage}></Route>
         <Route exact path="/administrator/dashboard/" component={AdministratorDashboard}></Route>
