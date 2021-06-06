@@ -24,34 +24,33 @@ export default class RoledMainMenu extends React.Component<RoledMainMenuProperti
             showCart=true;
         }
 
-        return <MainMenu items={items}/>
+        return <MainMenu items={items} showCart={showCart}/>
     }
 
     //ocekuje se niz mainmenuitems-a
     getUserMenuItems():MainMenuItems[]
     {
         return [
-            new MainMenuItems('Home','/'),
-            new MainMenuItems('Contact','/contact/'),
-            new MainMenuItems('My Orders', "/cart/orders/"),
-            new MainMenuItems('Log out','/user/logout')
+            new MainMenuItems('Početna','/'),
+            new MainMenuItems('Moje narudžbe', "/cart/orders/"),
+            new MainMenuItems('Odjavi se','/user/logout/')
         ];
     }
 
     getAdministratorItems():MainMenuItems[]
     {
         return [
-            new MainMenuItems('Dashboard', '/administrator/dashboard/'),
-            new MainMenuItems('Log out','/administrator/logout/')
+            new MainMenuItems('Administrator', '/administrator/dashboard/'),
+            new MainMenuItems('Odjavi se','/administrator/logout/')
         ];
     }
 
     getVisitorItems():MainMenuItems[]
     {
         return [
-            new MainMenuItems('Log in','/user/login/'),
-            new MainMenuItems('Register', '/user/register/'),
-            new MainMenuItems('Administrator login', '/administrator/login'),
+            new MainMenuItems('Korisnik prijava','/user/login/'),
+            new MainMenuItems('Registruj se', '/user/register/'),
+            new MainMenuItems('Administrator prijava', '/administrator/login/'),
         ];
     }
 
