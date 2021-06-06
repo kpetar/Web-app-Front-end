@@ -1,9 +1,10 @@
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Button, Card, Col, Form, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import api, {ApiResponse} from "../../api/api";
-import { ApiConfig } from "../../config/apiConfig";
 import ArticleType from "../../types/ArticleType";
+import  './AddToCart.css';
 
 interface AddToCartInputProperties{
     article:ArticleType
@@ -56,14 +57,14 @@ export default class AddToCartInput extends React.Component<AddToCartInputProper
             
                   <Form.Group>
                       <Row>
-                          <Col xs="7">
+                          <Col xs="4">
                               <Form.Control type="number" min="1"
-                                              step="1" value={this.state.quantity}
+                                              step="1" value={this.state.quantity} size="sm"
                                               onChange={(event)=>this.quantityChanged(event as any)}/>
                           </Col>
-                          <Col xs="5">
-                                <Button variant="secondary" block
-                                        onClick={()=>this.addToCart()}> Buy 
+                          <Col xs="8">
+                                <Button variant="success" block size="sm"
+                                        onClick={()=>this.addToCart()}> Dodaj u korpu <FontAwesomeIcon icon={faCartPlus}/>
                                 </Button>
                           </Col>
       
