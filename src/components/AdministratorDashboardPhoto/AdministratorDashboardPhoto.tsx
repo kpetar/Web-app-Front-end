@@ -7,6 +7,7 @@ import api, { apiFile, ApiResponse } from '../../api/api';
 import { ApiConfig } from '../../config/apiConfig';
 import PhotoType from '../../types/PhotoType';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+import administratorDashPhoto from '../AdministratorDashboard/AdministratorDashboard.module.css';
 
 interface AdministratorDashboardPhotoState{
   
@@ -97,17 +98,17 @@ interface AdministratorDashboardPhotoProperties{
     return (
       <Container>
         <RoledMainMenu role='administrator'/>
-          <Card>
+          <Card className={administratorDashPhoto.CardArticle}>
               <Card.Body>
                   <Card.Title>
-                      <FontAwesomeIcon icon={faImages}/> Photos
+                      <FontAwesomeIcon icon={faImages}/> Fotografije
                   </Card.Title>
 
                     <Nav>
                         <Nav.Item>
                             <Link to="/administrator/dashboard/article"
                                 className="btn btn-sm btn-info mb-3">
-                                    <FontAwesomeIcon icon={faBackward}/> Go back to articles
+                                    <FontAwesomeIcon icon={faBackward}/> Nazad na artikle
                                 </Link>
                         </Nav.Item>
                     </Nav>
@@ -119,16 +120,16 @@ interface AdministratorDashboardPhotoProperties{
 
                     <Form className="mt-5">
                         <p>
-                            <strong>Add a new photo to this article</strong>
+                            <strong> Dodaj fotografiju za ovaj artikal</strong>
                         </p>
                         <Form.Group>
-                            <Form.Label htmlFor="add-photo">New article photo</Form.Label>
+                            <Form.Label htmlFor="add-photo"> Dodaj fotografiju</Form.Label>
                             <Form.File id="add-photo" />
                         </Form.Group>
                         <Form.Group>
                             <Button variant="primary"
                                     onClick={()=>this.doUpload()}>
-                                <FontAwesomeIcon icon={faPlus}/> Upload photo
+                                <FontAwesomeIcon icon={faPlus}/> Otpremi fotografiju
                             </Button>
                         </Form.Group>
                     </Form>
@@ -176,7 +177,7 @@ interface AdministratorDashboardPhotoProperties{
                       {this.state.photos.length > 1 ? (
                           <Button variant="danger" block
                                 onClick={()=>this.deletePhoto(photo.photoId)}>
-                              <FontAwesomeIcon icon={faMinus}/> Delete photo
+                              <FontAwesomeIcon icon={faMinus}/> Obriši fotografiju
                           </Button>
                       ): ''}
                   </Card.Footer>
@@ -188,7 +189,7 @@ interface AdministratorDashboardPhotoProperties{
 private deletePhoto(photoId:number)
 {
 
-    if(!window.confirm('Are you sure?'))
+    if(!window.confirm('Da li ste sigurni?'))
     {
         return;
     }
