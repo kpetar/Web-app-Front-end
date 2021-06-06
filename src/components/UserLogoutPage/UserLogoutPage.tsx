@@ -35,7 +35,7 @@ export class UserLogoutPage extends React.Component
             );
         }
         return (
-            <p>Logging out...</p>
+            <p>Odjavljivanje...</p>
         );
     }
 
