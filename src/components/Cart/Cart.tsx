@@ -1,9 +1,10 @@
-import { faCartArrowDown, faMinusSquare } from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faCartArrowDown, faMinusSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Alert, Button, Form, Modal, Nav, Table } from "react-bootstrap";
 import api, { ApiResponse } from "../../api/api";
 import CartType from "../../types/CartType";
+import cartPage from '../ArticlePage/ArticlePage.module.css';
 
 interface CartState{
     count:number;
@@ -27,7 +28,7 @@ export default class Cart extends React.Component{
             count:0,
             visible:false,
             message:'',
-            cartMenuColor:'#000000'
+            cartMenuColor:'white'
         }
     }
 
@@ -91,7 +92,7 @@ export default class Cart extends React.Component{
             this.setStateCount(res.data.cartArticles.length);
 
             this.setStateMenuColor('#FF0000');
-            setTimeout(() => this.setStateMenuColor('#000000'), 2000);
+            setTimeout(() => this.setStateMenuColor('white'), 2000);
         });
 
 
@@ -189,11 +190,11 @@ export default class Cart extends React.Component{
 
             <Modal size="lg" centered show={this.state.visible} onHide={()=>this.hideCart()}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Vaša korpa</Modal.Title>
+                    <Modal.Title>Vaša korpa <FontAwesomeIcon icon={faBoxOpen}/></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Table hover size="sm">
-                        <thead>
+                        <thead className={cartPage.CartPage}>
                             <tr>
                                 <th>Kategorija</th>
                                 <th>Artikal</th>
@@ -203,7 +204,7 @@ export default class Cart extends React.Component{
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                             {this.state.cart?.cartArticles.map(item=>{
                                 
                                 const price = Number(item.article.articlePrices[item.article.articlePrices.length-1].price).toFixed(2);
@@ -226,15 +227,15 @@ export default class Cart extends React.Component{
                                 )
                             }, this)}
                         </tbody>
-                        <tfoot>
+                        <tfoot className={cartPage.CartPage}>
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td className="text-right">
-                                    <strong>Ukupno</strong>
+                                    <strong><i>Ukupno:</i></strong>
                                     </td>
-                                <td className="text-right">{Number(sum).toFixed(2)}</td>
+                                <td className="text-right">{Number(sum).toFixed(2)} KM</td>
                                 <td></td>
                             </tr>
                         </tfoot>
