@@ -5,6 +5,7 @@ import { Alert, Button, Card, Col, Container, Form } from "react-bootstrap";
 import { Redirect } from "react-router";
 import api, { ApiResponse, saveRefreshToken, saveToken } from '../../api/api';
 import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";
+import userLoginCss from './UserLoginPage.module.css';
 
 interface UserLoginPageState
 {
@@ -43,30 +44,32 @@ export default class UserLoginPage extends React.Component{
             <Container>
                 <RoledMainMenu role='visitor'/>
                 <Col md={{span:6, offset:3}}>
-                <Card>
+                <Card className={userLoginCss.CardBody}>
                     <Card.Body>
                         <Card.Title>
-                            <FontAwesomeIcon icon={faUserAlt}/> User info
+                            <FontAwesomeIcon icon={faUserAlt}/> Korisnik - prijava
                         </Card.Title>
                         <Form>
                             <Form.Group>
-                                <Form.Label htmlFor="email">E-mail</Form.Label>
+                                <Form.Label htmlFor="email"> E-mail</Form.Label>
                                 <Form.Control   id="email" type="email"
+                                                placeholder="name@example.com" 
                                                 value={this.state.email}
                                                 onChange={ event=>this.formInputChange(event as any)}/>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label htmlFor="password">Password</Form.Label>
+                                <Form.Label htmlFor="password"> Lozinka</Form.Label>
                                 <Form.Control   id="password" type="password"
                                                 value={this.state.password}
                                                 onChange={ event=>this.formInputChange(event as any)}/>
                             </Form.Group>
                             <Form.Group>
-                                <Button variant="primary" onClick={()=>this.doLogin()}>Log in</Button>
+                                <Button variant="primary" onClick={()=>this.doLogin()}> Prijavi se </Button>
                             </Form.Group>
                         </Form>
-                        <Alert variant="danger"  className={this.state.errorMessage ? '' : 'd-none'}
-                        /> {this.state.errorMessage}
+                        <Alert variant="danger"  className={this.state.errorMessage ? '' : 'd-none'}>
+                            {this.state.errorMessage}
+                        </Alert>
                     </Card.Body>
                 </Card>
                 </Col>
@@ -104,8 +107,8 @@ private doLogin()
                 let message='';
                 switch(res.data.statusCode)
                 {
-                    case -3001: message='Unknown email'; break;
-                    case -3002: message='Bad password'; break;
+                    case -3001: message='Nepostojeći e-mail'; break;
+                    case -3002: message='Pogrešna lozinka'; break;
                 }
                 this.setErrorMessage(message);
                 return;
