@@ -7,6 +7,7 @@ import api, { ApiResponse } from '../../api/api';
 import { ApiCategoryDto } from '../../dtos/ApiCategoryDto';
 import CategoryType from '../../types/CategoryTypes';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+import administratorDashCategory from '../AdministratorDashboard/AdministratorDashboard.module.css';
 
 interface AdministratorDashboardCategoryState{
   
@@ -173,10 +174,10 @@ interface AdministratorDashboardCategoryState{
     return (
       <Container>
         <RoledMainMenu role='administrator'/>
-          <Card>
+          <Card className={administratorDashCategory.CardArticle}>
               <Card.Body>
                   <Card.Title>
-                      <FontAwesomeIcon icon={faList}/> Categories
+                      <FontAwesomeIcon icon={faList}/> Kategorije
                   </Card.Title>
 
                 <Table hover size="sm" bordered>
@@ -186,14 +187,14 @@ interface AdministratorDashboardCategoryState{
                             <th className="text-center">
                                 <Button variant="primary" size="sm"
                                         onClick={()=>this.ShowAddModal()}>
-                                    <FontAwesomeIcon icon={faPlus}/>Add
+                                    <FontAwesomeIcon icon={faPlus}/>Dodaj
                                 </Button>
                             </th>
                         </tr>
                         <tr>
-                            <th className="text-right">ID</th>
-                            <th>Name</th>
-                            <th className="text-right">Parent ID</th>
+                            <th className="text-right"> Redni broj</th>
+                            <th>Naziv</th>
+                            <th className="text-right"> Redni broj roditelj kategorije</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -206,11 +207,11 @@ interface AdministratorDashboardCategoryState{
                                 <td className="text-center">
                                     <Link to={"/administrator/dashboard/feature/" + category.categoryId}
                                         className="btn btn-sm btn-info mr-2">
-                                        <FontAwesomeIcon icon={faListUl}/>Features
+                                        <FontAwesomeIcon icon={faListUl}/> Karakteristike
                                     </Link>
                                 <Button variant="info" size="sm"
                                         onClick={()=>this.showEditModal(category)}>
-                                    <FontAwesomeIcon icon={faEdit}/>Edit
+                                    <FontAwesomeIcon icon={faEdit}/> Izmjeni
                                 </Button>
                                 </td>
                             </tr>
@@ -222,24 +223,24 @@ interface AdministratorDashboardCategoryState{
 
             <Modal size="lg" centered show={this.state.addModal.visible} onHide={()=>this.setAddModalVisibleState(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add new category</Modal.Title>
+                    <Modal.Title> Dodaj novu kategoriju</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group>
-                        <Form.Label htmlFor="name">Name</Form.Label>
+                        <Form.Label htmlFor="name"> Naziv</Form.Label>
                         <Form.Control id="name" type="text" value={this.state.addModal.name}
                                 onChange={(e)=>this.setAddModalStringFieldState('name', e.target.value)}/>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="imagePath">Image URL</Form.Label>
+                    <Form.Label htmlFor="imagePath"> URL fotografije</Form.Label>
                         <Form.Control id="imagePath" type="url" value={this.state.addModal.imagePath}
                                 onChange={(e)=>this.setAddModalStringFieldState('imagePath', e.target.value)}/>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="parentCategoryId">Parent category</Form.Label>
+                    <Form.Label htmlFor="parentCategoryId"> Roditelj kategorija</Form.Label>
                         <Form.Control id="parentCategoryId" as="select" value={this.state.addModal.parentCategoryId?.toString()}
                                 onChange={(e)=>this.setAddModalNumberFieldState('parentCategoryId', e.target.value)}>
-                                    <option value='null'>No parent category</option>
+                                    <option value='null'> Nema roditelj kategorije</option>
                                     {this.state.categories.map(category=>(
                                         <option value={category.categoryId?.toString()}>
                                             {category.name}
@@ -249,7 +250,7 @@ interface AdministratorDashboardCategoryState{
                     </Form.Group>
                     <Form.Group>
                         <Button variant="primary" onClick={()=>this.doAddCategory()}>
-                            <FontAwesomeIcon icon={faPlus}/>Add new category
+                            <FontAwesomeIcon icon={faPlus}/> Dodaj novu kategoriju
                         </Button>
                     </Form.Group>
                     {this.state.addModal.message ? (
@@ -260,24 +261,24 @@ interface AdministratorDashboardCategoryState{
 
             <Modal size="lg" centered show={this.state.editModal.visible} onHide={()=>this.setEditModalVisibleState(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit new category</Modal.Title>
+                    <Modal.Title> Izmjeni kategoriju</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group>
-                        <Form.Label htmlFor="name">Name</Form.Label>
+                        <Form.Label htmlFor="name"> Naziv</Form.Label>
                         <Form.Control id="name" type="text" value={this.state.editModal.name}
                                 onChange={(e)=>this.setEditModalStringFieldState('name', e.target.value)}/>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="imagePath">Image URL</Form.Label>
+                    <Form.Label htmlFor="imagePath"> URL fotografije</Form.Label>
                         <Form.Control id="imagePath" type="url" value={this.state.editModal.imagePath}
                                 onChange={(e)=>this.setEditModalStringFieldState('imagePath', e.target.value)}/>
                     </Form.Group>
                     <Form.Group>
-                    <Form.Label htmlFor="parentCategoryId">Parent category</Form.Label>
+                    <Form.Label htmlFor="parentCategoryId"> Roditelj kategorija</Form.Label>
                         <Form.Control id="parentCategoryId" as="select" value={this.state.editModal.parentCategoryId?.toString()}
                                 onChange={(e)=>this.setEditModalNumberFieldState('parentCategoryId', e.target.value)}>
-                                    <option value='null'>No parent category</option>
+                                    <option value='null'> Nema roditelj kategorije</option>
                                     {this.state.categories
                                     .filter(category=>category.categoryId!== this.state.editModal.categoryId)
                                     .map(category=>(
@@ -289,7 +290,7 @@ interface AdministratorDashboardCategoryState{
                     </Form.Group>
                     <Form.Group>
                         <Button variant="primary" onClick={()=>this.doEdtCategory()}>
-                            <FontAwesomeIcon icon={faEdit}/>Edit new category
+                            <FontAwesomeIcon icon={faEdit}/> Izmjeni kategoriju
                         </Button>
                     </Form.Group>
                     {this.state.editModal.message ? (
