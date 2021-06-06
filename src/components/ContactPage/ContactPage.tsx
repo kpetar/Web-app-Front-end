@@ -12,10 +12,10 @@ export default class ContactPage extends React.Component{
                 <Card>
                     <Card.Body>
                         <Card.Title>
-                            <FontAwesomeIcon icon={faPhone} />Contact details
+                            <FontAwesomeIcon icon={faPhone} />Kontakt detalji
                         </Card.Title>
                         <Card.Text>
-                            Contact will be here soon...
+                            
                         </Card.Text>
                     </Card.Body>
                 </Card>
