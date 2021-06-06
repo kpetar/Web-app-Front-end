@@ -8,6 +8,7 @@ import ApiOrderDto from '../../dtos/ApiOrderDto';
 import CartType from '../../types/CartType';
 import OrderType from '../../types/OrderType';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+import administratorDashOrder from '../AdministratorDashboard/AdministratorDashboard.module.css';
 
 interface AdministratorDashboardOrderState
 {
@@ -23,7 +24,7 @@ export default class AdministratorDashboardOrder extends React.Component
 {
     state:AdministratorDashboardOrderState;
     
-    constructor(props: {} | Readonly<{}>)
+    constructor(props: Readonly<{}>)
     {
         super(props);
 
@@ -185,18 +186,17 @@ export default class AdministratorDashboardOrder extends React.Component
             <Table hover size="sm" bordered>
                     <thead>
                         <tr>
-                            <th className="text-center">Order ID</th>
-                            <th>Data</th>
-                            <th>Cart</th>
-                            <th>Options</th>
+                            <th className="text-center pr-2"> Redni broj</th>
+                            <th> Datum</th>
+                            <th> Korpa</th>
+                            <th> Opcije</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.orders.filter(order=>order.status===withStatus).map(order=>(
                             <tr>
-                                <td>{order.orderId}</td>
+                                <td className="text-right pr-2">{order.orderId}</td>
                                 <td>{order.createdAt.substr(0, 10)}</td>
-                                <td>{order.status}</td>
                                 <td>
                                 <Button size="sm" block variant="primary"
                                     onClick={()=>this.setAndShowCart(order.cart)}>
@@ -227,26 +227,26 @@ export default class AdministratorDashboardOrder extends React.Component
     return (
       <Container>
         <RoledMainMenu role='administrator'/>
-          <Card>
+          <Card className={administratorDashOrder.CardArticle}>
               <Card.Body>
                   <Card.Title>
-                      <FontAwesomeIcon icon={faCartArrowDown}/> Orders
+                      <FontAwesomeIcon icon={faCartArrowDown}/> Porudžbine
                   </Card.Title>
 
                   <Tabs defaultActiveKey="pending" className="ml-0 mb-0">
-                      <Tab eventKey="pending" title="Pending">
+                      <Tab eventKey="pending" title=" Na čekanju">
                           {this.renderOrders("pending")}
                       </Tab>
 
-                      <Tab eventKey="accepted" title="Accepted">
+                      <Tab eventKey="accepted" title=" Prihvaćeno">
                         {this.renderOrders("accepted")}
                       </Tab>
 
-                      <Tab eventKey="shipped" title="Shipped">
+                      <Tab eventKey="shipped" title=" Poslato">
                          {this.renderOrders("shipped")}
                       </Tab>
 
-                      <Tab eventKey="rejected" title="Rejected">
+                      <Tab eventKey="rejected" title=" Odbijeno">
                          {this.renderOrders("rejected")}
                       </Tab>
                   </Tabs>
@@ -256,17 +256,17 @@ export default class AdministratorDashboardOrder extends React.Component
             </Card>
             <Modal size="lg" centered show={this.state.cartVisible} onHide={()=>this.hideCart()}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Order content</Modal.Title>
+                    <Modal.Title> Sadržaj porudžbine</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Table hover size="sm">
                         <thead>
                             <tr>
-                                <th>Category</th>
-                                <th>Article</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Total</th>
+                                <th> Kategorija</th>
+                                <th> Artikal</th>
+                                <th className="text-right"> Količina</th>
+                                <th className="text-right"> Cijena</th>
+                                <th className="text-right"> Ukupno</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -276,11 +276,11 @@ export default class AdministratorDashboardOrder extends React.Component
                                 const total=Number(articlePrice.price*item.quantity).toFixed(2);
                                 return(
                                     <tr>
-                                        <td>{item.article.category.name}</td>
-                                        <td>{item.article.name}</td>
-                                        <td className="text-right">{item.quantity}</td>
-                                        <td className="text-right">{price}KM</td>
-                                        <td className="text-right">{total}KM</td>
+                                        <td> {item.article.category.name}</td>
+                                        <td> {item.article.name}</td>
+                                        <td className="text-right"> {item.quantity}</td>
+                                        <td className="text-right"> {price} KM</td>
+                                        <td className="text-right"> {total} KM</td>
                                     
                                     </tr>
                                 )
@@ -290,8 +290,10 @@ export default class AdministratorDashboardOrder extends React.Component
                             <tr>
                                 <td></td>
                                 <td></td>
-                                <td>Total</td>
-                                <td>{Number(sum).toFixed(0)}</td>
+                                <td></td>
+                                <td className="text-right"> 
+                                <strong><i> Ukupno:</i></strong></td>
+                                <td className="text-right"><strong><i> {Number(sum).toFixed(2)} KM</i></strong></td>
                             </tr>
                         </tfoot>
                     </Table>
@@ -308,9 +310,9 @@ export default class AdministratorDashboardOrder extends React.Component
             return (
                 <>
                 <Button type="button" variant="primary" size="sm" className="mr-1"
-                        onClick={()=>this.changeStatus(order.orderId, 'accepted')}>Accept</Button>
+                        onClick={()=>this.changeStatus(order.orderId, 'accepted')}> Prihvaćeno</Button>
                 <Button type="button" variant="danger" size="sm"
-                        onClick={()=>this.changeStatus(order.orderId, 'rejected')}>Reject</Button>
+                        onClick={()=>this.changeStatus(order.orderId, 'rejected')}> Odbijeno</Button>
                 </>
             );
         }
@@ -320,9 +322,9 @@ export default class AdministratorDashboardOrder extends React.Component
             return (
                 <>
                 <Button type="button" variant="primary" size="sm" className="mr-1"
-                        onClick={()=>this.changeStatus(order.orderId, 'shipped')}>Ship</Button>
+                        onClick={()=>this.changeStatus(order.orderId, 'shipped')}> Poslato</Button>
                 <Button type="button" variant="secondary" size="sm"
-                        onClick={()=>this.changeStatus(order.orderId, 'pending')}>Pending</Button>
+                        onClick={()=>this.changeStatus(order.orderId, 'pending')}> Na čekanju</Button>
                 </>
             );
         }
@@ -340,7 +342,7 @@ export default class AdministratorDashboardOrder extends React.Component
             return (
                 <>
                  <Button type="button" variant="secondary" size="sm"
-                        onClick={()=>this.changeStatus(order.orderId, 'pending')}>Pending</Button>
+                        onClick={()=>this.changeStatus(order.orderId, 'pending')}>Vrati na čekanju</Button>
                 </>
             );
         }
