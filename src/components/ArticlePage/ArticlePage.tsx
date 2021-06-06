@@ -8,7 +8,7 @@ import { ApiConfig } from "../../config/apiConfig";
 import ApiArticleDto from "../../dtos/ApiArticleDto";
 import AddToCartInput from "../AddToCartInput/AddToCartInput";
 import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";
-
+import articlePage from './ArticlePage.module.css';
 
 interface ArticlePageProperties
 {
@@ -101,7 +101,7 @@ export default class ArticlePage extends React.Component<ArticlePageProperties>
             }
             if(res.status==='error')
             {
-                this.setMessage('This article does not exist');
+                this.setMessage('Ovaj artikal ne postoji');
                 this.setArticleData(undefined); //kako ne bi prikazivana u okviru render-a
                 this.setFeatureData([]);
                 return;
@@ -147,10 +147,10 @@ export default class ArticlePage extends React.Component<ArticlePageProperties>
     return(
         <Container>
             <RoledMainMenu role='user'/>
-            <Card>
+            <Card className={articlePage.Card}>
                 <Card.Body>
                     <Card.Title>
-                        <FontAwesomeIcon icon={faBoxOpen}/> {this.state.article ? this.state.article?.name : 'Article not found'}
+                        <FontAwesomeIcon icon={faBoxOpen}/> {this.state.article ? this.state.article?.name : 'Artikal nije pronađen'}
                     </Card.Title>
 
                     {this.printOptionalMessage()}
@@ -183,9 +183,9 @@ export default class ArticlePage extends React.Component<ArticlePageProperties>
 
                     <hr/>
 
-                    <b>Features:</b><br/>
+                    <b>Karakteristike:</b><br/>
 
-                    <ul>
+                    <ul className={articlePage.Li}>
                         {this.state.features.map(feature=>(
                             <li>{feature.name} : {feature.value}</li>
                         ),this)}
@@ -196,7 +196,8 @@ export default class ArticlePage extends React.Component<ArticlePageProperties>
                         <Col xs="12" className="mb-3">
                             <img alt={ 'Image' + article.photos[0].photoId }
                                     src={ ApiConfig.PHOTO_PATH + 'small/' + article.photos[0].imagePath }
-                                    className="w-100"/>
+                                    className="w-100" title={this.state.article?.name}
+                                    />
                         </Col>
                     </Row>
                     <Row>
@@ -204,18 +205,18 @@ export default class ArticlePage extends React.Component<ArticlePageProperties>
                             <Col xs="12" sm="6">
                                 <img alt={ 'Image' + photo.photoId }
                                     src={ ApiConfig.PHOTO_PATH + 'small/' + photo.imagePath }
-                                    className="w-100 mb-3"/>
+                                    className="w-100 mb-3" title={this.state.article?.name}/>
                             </Col>
                         ),this)}
                     </Row>
 
                     <Row>
                         <Col xs="12" className="text-center mb-3"> 
-                            <b>
-                            Price:{
+                            <strong>
+                            Cijena: {
                                 Number(article.articlePrices[article.articlePrices.length-1].price).toFixed(2)+ ' KM'
                             }
-                            </b>
+                            </strong>
                         </Col>
                     </Row>
                     <Row>
